@@ -1,0 +1,12 @@
+[Condition]: Sore Throat
+[Category]: Self-care
+[Content]:
+- Gargle warm salt water.
+- Use paracetamol or ibuprofen as per label.
+- Stay hydrated and rest.
+[Escalate if]:
+- Difficulty swallowing
+- Drooling
+- Rash and fever
+- Fever > 38.5 °C for 3+ days
+[Source]: healthdirect.gov.au

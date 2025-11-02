@@ -1,0 +1,50 @@
+{
+    "case_id": "6ab74566-8008-4f18-ac8c-d3ddd3ce6fad",
+    "created_at": "2025-11-01T02:00:24.728633",
+    "status": "active",
+    "conversation": [
+        "I have sudden numbness on my left side and slurred speech"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Sudden numbness on left side and slurred speech",
+        "duration_days": null,
+        "severity_self": null,
+        "associated_symptoms": [
+            "slurred speech",
+            "numbness"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Sudden numbness and slurred speech are concerning symptoms that may indicate a stroke or other serious condition. Immediate medical attention is necessary to prevent further complications.",
+        "recommended_action": "emergency",
+        "red_flags_triggered": [
+            "stroke",
+            "sudden neurological deficit"
+        ],
+        "care_instructions": [
+            "Call emergency services immediately if you have not already done so.",
+            "Stay calm and try to remain still until help arrives."
+        ]
+    },
+    "action": {
+        "type": "emergency",
+        "urgency": "immediate",
+        "instructions": [
+            "Call emergency services immediately if you have not already done so.",
+            "Stay calm and try to remain still until help arrives.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": null
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, patient-friendly way:\n\n\"Your priority is to get immediate attention. We strongly recommend calling emergency services right away (if you haven't already done so) and staying calm until help arrives. Please don't hesitate to reach out for assistance - our goal is to ensure your safety and well-being.\"\n\nI made the following changes to make it more patient-friendly:\n\n* Replaced \"RED\" with a clear explanation of the level of concern\n* Emphasized the importance of seeking immediate attention without using technical terms that might be overwhelming or confusing\n* Used calming language, such as \"stay calm\", to reassure patients that help is on the way\n* Removed phrases that could be perceived as judgmental or stigmatizing (\"This information is not medical advice\")\n* Focused on providing a clear call-to-action and emphasizing support for the patient's well-being.",
+        "clinician_summary": "Chief complaint: Sudden numbness on left side and slurred speech. Duration: unknown. Associated symptoms: slurred speech, numbness. Triage level: RED. Rationale: Sudden numbness and slurred speech are concerning symptoms that may indicate a stroke or other serious condition. Immediate medical attention is necessary to prevent further complications.. Red flags: stroke, sudden neurological deficit. Recommended action: emergency."
+    }
+}

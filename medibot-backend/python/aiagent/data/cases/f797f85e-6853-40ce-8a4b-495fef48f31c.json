@@ -1,0 +1,48 @@
+{
+    "case_id": "f797f85e-6853-40ce-8a4b-495fef48f31c",
+    "created_at": "2025-11-01T01:59:29.129104",
+    "status": "active",
+    "conversation": [
+        "I have a persistent cough and mild fever for 3 days"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Persistent cough",
+        "duration_days": 3.0,
+        "severity_self": null,
+        "associated_symptoms": [
+            "Mild fever"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "GREEN",
+        "rationale": "The patient's persistent cough and mild fever are self-limiting symptoms that can be managed with rest and hydration. The duration of 3 days is within the typical range for a viral upper respiratory tract infection, which is often accompanied by a cough and low-grade fever.",
+        "recommended_action": "self-care",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "Encourage the patient to stay hydrated with plenty of fluids.",
+            "Advise rest and avoiding strenuous activities.",
+            "Recommend over-the-counter medication for symptom relief, if necessary."
+        ]
+    },
+    "action": {
+        "type": "self-care",
+        "urgency": "routine",
+        "instructions": [
+            "Encourage the patient to stay hydrated with plenty of fluids.",
+            "Advise rest and avoiding strenuous activities.",
+            "Recommend over-the-counter medication for symptom relief, if necessary.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": "2025-11-02T01:59:48.492944"
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, and patient-friendly way:\n\n\"Your symptoms are mild, but we want to make sure you're taking good care of yourself. Please drink plenty of fluids to stay hydrated, take it easy by getting plenty of rest, and consider taking some over-the-counter medication if your symptoms persist. If your symptoms worsen or you experience any concerning changes, don't hesitate to reach out to us for further guidance.\"",
+        "clinician_summary": "Chief complaint: Persistent cough. Duration: unknown. Associated symptoms: Mild fever. Triage level: GREEN. Rationale: The patient's persistent cough and mild fever are self-limiting symptoms that can be managed with rest and hydration. The duration of 3 days is within the typical range for a viral upper respiratory tract infection, which is often accompanied by a cough and low-grade fever.. Recommended action: self-care."
+    }
+}

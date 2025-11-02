@@ -1,0 +1,61 @@
+{
+    "case_id": "f70521a4-d986-4cc3-abb4-360e814e01fb",
+    "created_at": "2025-11-01T01:51:55.907119",
+    "status": "active",
+    "conversation": [
+        "I have a mild headache"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "headache",
+        "duration_days": 1.0,
+        "severity_self": null,
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "GREEN",
+        "rationale": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+        "recommended_action": "self-care",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary."
+        ]
+    },
+    "action": {
+        "type": "self-care",
+        "urgency": "routine",
+        "instructions": [
+            "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": "2025-11-02T01:52:15.488417"
+    },
+    "summary": {
+        "user": {
+            "what_you_reported": "I have a mild headache",
+            "triage_level": "GREEN",
+            "reasoning": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+            "what_to_do_now": "self-care",
+            "next_steps": [],
+            "follow_up_due": "2025-11-02T01:52:15.488417",
+            "note": "This information is for triage support and not a medical diagnosis."
+        },
+        "clinician": {
+            "chief_complaint": "headache",
+            "duration_days": 1.0,
+            "associated_symptoms": [],
+            "severity_self": null,
+            "triage_level": "GREEN",
+            "rationale": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+            "red_flags": [],
+            "recommended_action": "self-care",
+            "tasks": [],
+            "follow_up_due": "2025-11-02T01:52:15.488417"
+        }
+    }
+}

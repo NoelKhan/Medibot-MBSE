@@ -1,0 +1,34 @@
+{
+    "case_id": "6081bd8f-f622-46d7-b415-cf4bacf64da3",
+    "created_at": "2025-10-28T16:43:00.699646",
+    "status": "active",
+    "conversation": [
+        "I've been coughing for 3 days and soemtimes cough up blood and it hurts so much."
+    ],
+    "last_symptoms": {
+        "chief_complaint": "I've been coughing for 3 days and soemtimes cough up blood and it hurts so much.",
+        "raw_output": "{\n\"chief_complaint\": \"Cough with blood\",\n\"duration_days\": 3,\n\"severity_self\": \"Severe\",\n\"associated_symptoms\": null,\n\"risk_factors\": null,\n\"age_band\": null,\n\"medications\": null,\n\"allergies\": null\n}"
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Blood in the cough is a serious symptom that requires immediate medical attention. It could be due to pneumonia, tuberculosis, or other severe conditions. Please seek emergency care immediately.",
+        "recommended_action": "Emergency",
+        "red_flags_triggered": [
+            "Blood in the cough"
+        ],
+        "care_instructions": "Seek immediate medical attention. Do not delay."
+    },
+    "action": {
+        "action_type": "Emergency",
+        "tasks": [
+            "Rest and hydrate.",
+            "If symptoms worsen, seek medical help promptly.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "follow_up_due": "2025-10-29T04:43:34.666942"
+    },
+    "summary": {
+        "patient_summary": "Summary for you:\n- What you reported: I've been coughing for 3 days and soemtimes cough up blood and it hurts so much.\n- Triage level: RED\n- What to do now: Emergency\n- Next steps: Rest and hydrate., If symptoms worsen, seek medical help promptly., This information is not medical advice. Seek professional help if uncertain.\nNote: This is general information for triage support and not a medical diagnosis.",
+        "clinician_summary": "Clinician Hand-over Summary:\n- Chief complaint: I've been coughing for 3 days and soemtimes cough up blood and it hurts so much.\n- Duration (days): None\n- Associated symptoms: \n- Risk factors: \n- Severity (self): None\n- Triage level: RED\n- Red flags: Blood in the cough\n- Recommended action: Emergency\n- Plan: Rest and hydrate., If symptoms worsen, seek medical help promptly., This information is not medical advice. Seek professional help if uncertain."
+    }
+}

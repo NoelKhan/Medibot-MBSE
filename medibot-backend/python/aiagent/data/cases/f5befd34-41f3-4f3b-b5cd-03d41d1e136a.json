@@ -1,0 +1,49 @@
+{
+    "case_id": "f5befd34-41f3-4f3b-b5cd-03d41d1e136a",
+    "created_at": "2025-11-01T13:01:17.362951",
+    "status": "active",
+    "conversation": [
+        "Persistent cough for 2 weeks with fever"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Persistent cough",
+        "duration_days": 14.0,
+        "severity_self": null,
+        "associated_symptoms": [
+            "Fever"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "AMBER",
+        "rationale": "Persistent cough for 2 weeks with fever suggests a possible respiratory infection. Fever indicates an inflammatory response, which may require medical evaluation.",
+        "recommended_action": "referral",
+        "red_flags_triggered": [
+            "fever",
+            "persistent cough"
+        ],
+        "care_instructions": [
+            "Monitor temperature and report any increase to healthcare provider.",
+            "Continue to rest and stay hydrated."
+        ]
+    },
+    "action": {
+        "type": "referral",
+        "urgency": "soon",
+        "instructions": [
+            "Monitor temperature and report any increase to healthcare provider.",
+            "Continue to rest and stay hydrated.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": "general",
+        "resources": [],
+        "follow_up_due": "2025-11-03T01:01:35.247364"
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, and patient-friendly way:\n\n\"Hello! We've assessed your symptoms and think it would be helpful for you to see a specialist. Please keep an eye on your temperature and let us know right away if it starts to rise. In the meantime, take care of yourself by getting plenty of rest and staying hydrated - we're here to support you every step of the way.\"",
+        "clinician_summary": "Chief complaint: Persistent cough. Duration: unknown. Associated symptoms: Fever. Triage level: AMBER. Rationale: Persistent cough for 2 weeks with fever suggests a possible respiratory infection. Fever indicates an inflammatory response, which may require medical evaluation.. Red flags: fever, persistent cough. Recommended action: referral."
+    }
+}

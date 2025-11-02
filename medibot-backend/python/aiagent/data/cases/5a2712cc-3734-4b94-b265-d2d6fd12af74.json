@@ -1,0 +1,33 @@
+{
+    "case_id": "5a2712cc-3734-4b94-b265-d2d6fd12af74",
+    "created_at": "2025-10-28T16:40:10.389508",
+    "status": "active",
+    "conversation": [
+        "I've been coughing for 3 days and soemtimes cough up blood and it hurts so much."
+    ],
+    "last_symptoms": {
+        "chief_complaint": "I've been coughing for 3 days and soemtimes cough up blood and it hurts so much.",
+        "raw_output": "{\n\"chief_complaint\": \"Cough with blood\",\n\"duration_days\": 3,\n\"severity_self\": \"Severe\",\n\"associated_symptoms\": null,\n\"risk_factors\": null,\n\"age_band\": null,\n\"medications\": null,\n\"allergies\": null\n}"
+    },
+    "triage": {
+        "severity_level": "UNKNOWN",
+        "rationale": "Could not parse LLM output as valid JSON.",
+        "recommended_action": "manual review",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "Based on the patient's symptoms, this case should be classified as RED. The patient needs immediate medical attention for severe cough with blood and chest pain. Please contact emergency services immediately."
+        ]
+    },
+    "action": {
+        "action_type": "manual review",
+        "tasks": [
+            "Based on the patient's symptoms, this case should be classified as RED. The patient needs immediate medical attention for severe cough with blood and chest pain. Please contact emergency services immediately.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "follow_up_due": "2025-10-29T04:40:35.720424"
+    },
+    "summary": {
+        "patient_summary": "Summary for you:\n- What you reported: I've been coughing for 3 days and soemtimes cough up blood and it hurts so much.\n- Triage level: UNKNOWN\n- What to do now: manual review\n- Next steps: Based on the patient's symptoms, this case should be classified as RED. The patient needs immediate medical attention for severe cough with blood and chest pain. Please contact emergency services immediately., This information is not medical advice. Seek professional help if uncertain.\nNote: This is general information for triage support and not a medical diagnosis.",
+        "clinician_summary": "Clinician Hand-over Summary:\n- Chief complaint: I've been coughing for 3 days and soemtimes cough up blood and it hurts so much.\n- Duration (days): None\n- Associated symptoms: \n- Risk factors: \n- Severity (self): None\n- Triage level: UNKNOWN\n- Red flags: \n- Recommended action: manual review\n- Plan: Based on the patient's symptoms, this case should be classified as RED. The patient needs immediate medical attention for severe cough with blood and chest pain. Please contact emergency services immediately., This information is not medical advice. Seek professional help if uncertain."
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "case_id": "d5f3bce6-439e-49d7-848e-a671095bc30f",
+    "created_at": "2025-10-28T16:22:19.183036",
+    "status": "active",
+    "conversation": [
+        "I've been coughing for 3 days and it has started to hurt my throat whenever I cough and sometimes I cough blood"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "cough",
+        "duration_days": 3.0,
+        "severity_self": null,
+        "associated_symptoms": [
+            "cough"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "GREEN",
+        "rationale": "The patient's symptoms are mild and not associated with any red flags. The duration is short, and there are no risk factors or age-related considerations. Therefore, this patient would be classified as a green (low-risk) case for triage.",
+        "recommended_action": "self-care",
+        "red_flags_triggered": []
+    },
+    "action": {
+        "action_type": "self-care",
+        "tasks": [
+            "Stay hydrated and rest.",
+            "Use salt-water gargles for sore throat.",
+            "Use paracetamol/ibuprofen only as per label instructions.",
+            "Seek care sooner if new red flags appear (trouble breathing, severe pain)."
+        ],
+        "follow_up_due": "2025-10-29T16:22:29.056962"
+    },
+    "summary": {
+        "patient_summary": "Summary for you:\n- What you reported: I've been coughing for 3 days and it has started to hurt my throat whenever I cough and sometimes I cough blood\n- Triage level: GREEN\n- What to do now: self-care\n- Next steps: Stay hydrated and rest., Use salt-water gargles for sore throat., Use paracetamol/ibuprofen only as per label instructions., Seek care sooner if new red flags appear (trouble breathing, severe pain).\nNote: This is general information for triage support and not a medical diagnosis.",
+        "clinician_summary": "Clinician Hand-over Summary:\n- Chief complaint: cough\n- Duration (days): 3.0\n- Associated symptoms: cough\n- Risk factors: \n- Severity (self): None\n- Triage level: GREEN\n- Red flags: \n- Recommended action: self-care\n- Plan: Stay hydrated and rest., Use salt-water gargles for sore throat., Use paracetamol/ibuprofen only as per label instructions., Seek care sooner if new red flags appear (trouble breathing, severe pain)."
+    }
+}

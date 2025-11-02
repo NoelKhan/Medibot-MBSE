@@ -1,0 +1,404 @@
+/**
+ * Patient Login Page
+ * ==================
+ * Login page ONLY for patients
+ * Separated from medical and emergency staff for security
+ */
+
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Container,
+  Box,
+  Paper,
+  TextField,
+  Button,
+  Typography,
+  Link,
+  Alert,
+  CircularProgress,
+  IconButton,
+  Divider,
+  Card,
+  CardContent,
+} from '@mui/material';
+import { 
+  ArrowBack as ArrowBackIcon, 
+  Person as PersonIcon,
+} from '@mui/icons-material';
+import { useAuth } from '../contexts/AuthContext';
+import { medibotColors } from '../theme/medibot-theme';
+
+// PATIENT TEST ACCOUNTS ONLY
+const PATIENT_TEST_ACCOUNTS = [
+  {
+    email: 'test@medibot.com',
+    password: 'Test123!',
+    name: 'API Test Patient',
+    description: 'Full backend integration with case history',
+  },
+  {
+    email: 'sarah.johnson@example.com',
+    password: 'password123',
+    name: 'Sarah Johnson',
+    description: '29F, Asthma & Allergies',
+  },
+  {
+    email: 'robert.chen@example.com',
+    password: 'password123',
+    name: 'Robert Chen',
+    description: '49M, Type 2 Diabetes',
+  },
+  {
+    email: 'margaret.williams@example.com',
+    password: 'password123',
+    name: 'Margaret Williams',
+    description: '78F, Multiple chronic conditions',
+  },
+];
+
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showTestAccounts, setShowTestAccounts] = useState(true);
+
+  // Get role from navigation state
+  const role = (location.state as any)?.role || 'patient';
+  const isDemo = (location.state as any)?.isDemo || false;
+
+  const getRoleInfo = () => {
+    switch (role) {
+      case 'patient':
+        return { label: 'Patient', color: medibotColors.primary[500] };
+      case 'staff':
+        return { label: 'Medical Staff', color: medibotColors.secondary[500] };
+      case 'emergency':
+        return { label: 'Emergency Staff', color: medibotColors.error[500] };
+      default:
+        return { label: 'Patient', color: medibotColors.primary[500] };
+    }
+  };
+
+  const roleInfo = getRoleInfo();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await login(email, password);
+      navigate('/home');
+    } catch (err: any) {
+      setError(err.message || 'Failed to login. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Demo credentials helper
+  const fillDemoCredentials = () => {
+    if (role === 'staff') {
+      setEmail('doctor@demo.com');
+      setPassword('doctor123');
+    } else {
+      setEmail('patient@demo.com');
+      setPassword('patient123');
+    }
+  };
+
+  // Select test account
+  const selectTestAccount = (account: typeof TEST_ACCOUNTS[0]) => {
+    setEmail(account.email);
+    setPassword(account.password);
+    setShowTestAccounts(false);
+  };
+
+  return (
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: medibotColors.neutral[50],
+        position: 'relative',
+      }}
+    >
+      {/* Back Button */}
+      <IconButton
+        onClick={() => navigate('/')}
+        sx={{
+          position: 'absolute',
+          top: 20,
+          left: 20,
+          bgcolor: 'white',
+          boxShadow: 2,
+          '&:hover': {
+            bgcolor: medibotColors.neutral[100],
+          },
+        }}
+      >
+        <ArrowBackIcon />
+      </IconButton>
+
+      <Container maxWidth="sm">
+        <Box
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            py: 4,
+          }}
+        >
+          <Paper 
+            elevation={6} 
+            sx={{ 
+              p: 4, 
+              borderRadius: 4,
+              border: `2px solid ${medibotColors.primary[100]}`,
+            }}
+          >
+            <Box sx={{ textAlign: 'center', mb: 3 }}>
+              {/* Logo */}
+              <Box
+                sx={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: '50%',
+                  background: `linear-gradient(135deg, ${medibotColors.primary[500]} 0%, ${medibotColors.primary[700]} 100%)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin: '0 auto',
+                  mb: 2,
+                  boxShadow: `0 8px 24px ${medibotColors.primary[500]}40`,
+                }}
+              >
+                <MedicalIcon sx={{ fontSize: 40, color: 'white' }} />
+              </Box>
+
+              <Typography variant="h4" component="h1" gutterBottom fontWeight="700">
+                Welcome to MediBot
+              </Typography>
+              
+              {/* Role Badge */}
+              <Chip
+                label={`Sign in as ${roleInfo.label}`}
+                sx={{
+                  bgcolor: roleInfo.color + '20',
+                  color: roleInfo.color,
+                  fontWeight: 600,
+                  mb: 1,
+                }}
+              />
+              
+              <Typography variant="body2" color="text.secondary">
+                Enter your credentials to continue
+              </Typography>
+            </Box>
+
+            {isDemo && (
+              <Alert 
+                severity="info" 
+                sx={{ mb: 2 }}
+                action={
+                  <Button size="small" onClick={fillDemoCredentials}>
+                    Fill
+                  </Button>
+                }
+              >
+                Demo Mode: Use patient@demo.com / patient123 or doctor@demo.com / doctor123
+              </Alert>
+            )}
+
+            {!isDemo && (
+              <Alert 
+                severity="info" 
+                sx={{ mb: 2 }}
+                action={
+                  <Button size="small" color="inherit" onClick={fillDemoCredentials}>
+                    Use Demo
+                  </Button>
+                }
+              >
+                {role === 'staff' 
+                  ? '🏥 Staff Login: doctor@demo.com / doctor123'
+                  : '👤 Patient Login: patient@demo.com / patient123'
+                }
+              </Alert>
+            )}
+
+            {/* Test Accounts Section */}
+            {showTestAccounts && (
+              <Box sx={{ mb: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                  <Typography variant="subtitle2" fontWeight="600" color="text.secondary">
+                    🧪 Test Accounts (Development)
+                  </Typography>
+                  <Button
+                    size="small"
+                    onClick={() => setShowTestAccounts(false)}
+                    sx={{ textTransform: 'none' }}
+                  >
+                    Hide
+                  </Button>
+                </Box>
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 1.5 }}>
+                  {TEST_ACCOUNTS.map((account, index) => {
+                    const IconComponent = account.icon;
+                    return (
+                      <Card
+                        key={index}
+                        sx={{
+                          cursor: 'pointer',
+                          transition: 'all 0.2s',
+                          border: `1px solid ${account.color}30`,
+                          '&:hover': {
+                            borderColor: account.color,
+                            boxShadow: `0 4px 12px ${account.color}20`,
+                            transform: 'translateY(-2px)',
+                          },
+                        }}
+                        onClick={() => selectTestAccount(account)}
+                      >
+                        <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                          <Box sx={{ display: 'flex', alignItems: 'start', gap: 1.5 }}>
+                            <Box
+                              sx={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 2,
+                                bgcolor: `${account.color}15`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                              }}
+                            >
+                              <IconComponent sx={{ color: account.color, fontSize: 24 }} />
+                            </Box>
+                            <Box sx={{ flex: 1, minWidth: 0 }}>
+                              <Typography variant="body2" fontWeight="600" noWrap>
+                                {account.name}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 0.5 }}>
+                                {account.description}
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: 'monospace', color: account.color, fontSize: '0.7rem' }}>
+                                {account.email}
+                              </Typography>
+                            </Box>
+                          </Box>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </Box>
+                <Divider sx={{ my: 2 }} />
+              </Box>
+            )}
+
+            {!showTestAccounts && (
+              <Button
+                size="small"
+                fullWidth
+                onClick={() => setShowTestAccounts(true)}
+                sx={{ mb: 2, textTransform: 'none' }}
+              >
+                Show Test Accounts
+              </Button>
+            )}
+
+            {error && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {error}
+              </Alert>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <TextField
+                fullWidth
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                margin="normal"
+                required
+                autoComplete="email"
+                autoFocus
+                disabled={loading}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+
+              <TextField
+                fullWidth
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                margin="normal"
+                required
+                autoComplete="current-password"
+                disabled={loading}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                sx={{ 
+                  mt: 3, 
+                  mb: 2, 
+                  py: 1.5,
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  boxShadow: `0 4px 16px ${medibotColors.primary[500]}40`,
+                }}
+                disabled={loading}
+              >
+                {loading ? <CircularProgress size={24} /> : 'Sign In'}
+              </Button>
+
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="body2" color="text.secondary">
+                  Don't have an account?{' '}
+                  <Link
+                    href="/register"
+                    underline="hover"
+                    sx={{ 
+                      cursor: 'pointer',
+                      color: medibotColors.primary[600],
+                      fontWeight: 600,
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate('/register', { state: { role } });
+                    }}
+                  >
+                    Sign up
+                  </Link>
+                </Typography>
+              </Box>
+            </form>
+          </Paper>
+        </Box>
+      </Container>
+    </Box>
+  );
+}

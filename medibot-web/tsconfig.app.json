@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "types": ["vite/client", "node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": false,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "erasableSyntaxOnly": false,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": false
+  },
+  "include": ["src"],
+  "exclude": [
+    "src/services/CalendarService.ts",
+    "src/services/NotificationService.ts",
+    "src/services/ChatHistoryService.ts",
+    "src/services/FollowupTaskManager.ts",
+    "src/services/Logger.ts",
+    "src/utils/RoleGuard.ts",
+    "src/utils/Storage.ts",
+    "src/types/Notification.ts"
+  ]
+}

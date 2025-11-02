@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Llama - AI Health Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #e0e0e0;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: #667eea;
+        }
+
+        .message.assistant .message-avatar {
+            background: #10b981;
+        }
+
+        .message-content {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 18px;
+            max-width: 70%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background: #667eea;
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: white;
+            color: #1f2937;
+        }
+
+        .chat-input-container {
+            padding: 25px;
+            background: white;
+            border-top: 2px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .send-button:hover {
+            transform: scale(1.05);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Medical Report Section */
+        .report-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .report-header {
+            background: #1f2937;
+            color: white;
+            padding: 25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .report-content {
+            padding: 25px;
+        }
+
+        .report-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .report-card h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .severity-green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .severity-yellow {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .severity-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .report-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .report-item:last-child {
+            border-bottom: none;
+        }
+
+        .report-item strong {
+            display: block;
+            color: #4b5563;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .report-item p {
+            color: #1f2937;
+            line-height: 1.5;
+        }
+
+        .report-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .report-item li {
+            padding: 8px 0;
+            color: #1f2937;
+        }
+
+        .report-item li:before {
+            content: "• ";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 15px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #9ca3af;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Emergency Modal */
+        .emergency-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(220, 38, 38, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            animation: emergencyPulse 2s ease-in-out infinite;
+        }
+
+        .emergency-overlay.active {
+            display: flex;
+        }
+
+        @keyframes emergencyPulse {
+            0%, 100% { background: rgba(220, 38, 38, 0.95); }
+            50% { background: rgba(239, 68, 68, 0.98); }
+        }
+
+        .emergency-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            animation: modalSlideIn 0.5s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .emergency-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: emergencyIconPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes emergencyIconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .emergency-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .emergency-message {
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .emergency-call-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .emergency-call-button:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(220, 38, 38, 0.4);
+        }
+
+        .emergency-call-button:active {
+            transform: scale(0.95);
+        }
+
+        .calling-animation {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .calling-animation.active {
+            display: block;
+        }
+
+        .calling-text {
+            font-size: 20px;
+            color: #dc2626;
+            margin-bottom: 15px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .close-emergency {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-emergency:hover {
+            background: #4b5563;
+        }
+
+        .emergency-instructions {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .emergency-instructions h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .emergency-instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .emergency-instructions li {
+            color: #78350f;
+            margin: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .emergency-instructions li:before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Emergency Modal Overlay -->
+    <div class="emergency-overlay" id="emergencyOverlay">
+        <div class="emergency-modal">
+            <div class="emergency-icon">🚨</div>
+            <div class="emergency-title">EMERGENCY DETECTED</div>
+            <div class="emergency-message" id="emergencyMessage">
+                Your symptoms indicate a potential medical emergency. Immediate medical attention is required.
+            </div>
+            
+            <button class="emergency-call-button" onclick="initiateEmergencyCall()">
+                📞 Call 000 (Emergency)
+            </button>
+            
+            <div class="calling-animation" id="callingAnimation">
+                <div class="calling-text">☎️ Calling Emergency Services...</div>
+                <div style="font-size: 14px; color: #666;">This is a simulation. In a real emergency, call 000 immediately.</div>
+            </div>
+            
+            <div class="emergency-instructions">
+                <h4>⚠️ While Waiting for Help:</h4>
+                <ul>
+                    <li>Stay calm and keep the person comfortable</li>
+                    <li>Do not leave the person alone</li>
+                    <li>Follow any specific first aid instructions</li>
+                    <li>Have someone ready to guide paramedics to your location</li>
+                    <li>Do not give food or water unless instructed</li>
+                </ul>
+            </div>
+            
+            <button class="close-emergency" onclick="closeEmergencyModal()">
+                I Understand - Close
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Chat Section -->
+        <div class="chat-section">
+            <div class="chat-header">
+                🏥 Medical Llama - AI Health Assistant
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        Hello! I'm your AI medical assistant. I'm here to help assess your symptoms and provide guidance. 
+                        <br><br>
+                        <strong>How can I help you today?</strong> Please describe any symptoms you're experiencing.
+                        <br><br>
+                        <em style="font-size: 12px; opacity: 0.7;">Disclaimer: This is not a substitute for professional medical advice. In case of emergency, call 999 immediately.</em>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Type your symptoms here..."
+                    onkeypress="if(event.key === 'Enter') sendMessage()"
+                >
+                <button class="send-button" onclick="sendMessage()" id="sendButton">
+                    Send
+                </button>
+            </div>
+        </div>
+
+        <!-- Medical Report Section -->
+        <div class="report-section">
+            <div class="report-header">
+                📊 Medical Report
+            </div>
+            
+            <div class="report-content" id="reportContent">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <p>Start chatting to generate your medical report</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let conversationHistory = [];
+        let patientId = 'patient_' + Date.now();
+        let currentReport = {
+            severity: null,
+            confidence: 0,
+            symptoms: [],
+            possibleConditions: [],
+            recommendations: [],
+            medications: []
+        };
+
+        // Initialize patient
+        async function initializePatient() {
+            try {
+                const response = await fetch('http://localhost:8000/patients/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        patient_id: patientId,
+                        name: "Anonymous User",
+                        age: 30,
+                        medical_history: [],
+                        allergies: [],
+                        current_medications: []
+                    })
+                });
+            } catch (error) {
+                console.log('Patient registration:', error.message);
+            }
+        }
+
+        initializePatient();
+
+        function addMessage(content, isUser = false) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'assistant'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${isUser ? '👤' : '🤖'}</div>
+                <div class="message-content">${content}</div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const messagesDiv = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message assistant';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById('typingIndicator');
+            if (typingDiv) typingDiv.remove();
+        }
+
+        function updateReport(result) {
+            const reportDiv = document.getElementById('reportContent');
+            const triageResult = result; // The full API response
+            
+            // Update internal state
+            if (triageResult.severity && triageResult.severity !== 'unknown') {
+                currentReport.severity = triageResult.severity;
+            }
+            if (triageResult.confidence) {
+                currentReport.confidence = triageResult.confidence;
+            }
+            
+            // Extract info from recommendation
+            const recommendation = triageResult.recommendation || '';
+            
+            // If still gathering information, show a minimal report
+            if (triageResult.severity === 'unknown' || !currentReport.severity) {
+                reportDiv.innerHTML = `
+                    <div class="report-card">
+                        <h3>💬 Gathering Information</h3>
+                        <div class="report-item">
+                            <p>I'm asking follow-up questions to better understand your symptoms and provide an accurate assessment.</p>
+                        </div>
+                    </div>
+                    <div class="report-card" style="background: #fef3c7; border-left: 4px solid #f59e0b;">
+                        <div class="report-item">
+                            <strong>⚠️ Important Disclaimer</strong>
+                            <p style="font-size: 13px;">${triageResult.disclaimer || 'This is not a substitute for professional medical advice. Always consult a qualified healthcare provider for diagnosis and treatment.'}</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Determine severity color
+            let severityClass = 'severity-green';
+            let severityText = '🟢 Self-Care';
+            let severityIcon = '✅';
+            
+            if (currentReport.severity === 'emergency') {
+                severityClass = 'severity-red';
+                severityText = '🔴 EMERGENCY';
+                severityIcon = '🚨';
+            } else if (currentReport.severity === 'urgent' || currentReport.severity === 'referral') {
+                severityClass = 'severity-yellow';
+                severityText = '🟡 Doctor Visit Recommended';
+                severityIcon = '⚠️';
+            }
+
+            // Build HTML
+            let html = `
+                <div class="report-card">
+                    <h3>${severityIcon} Assessment Status</h3>
+                    <div class="severity-badge ${severityClass}">${severityText}</div>
+                    <div class="report-item">
+                        <strong>Confidence Level</strong>
+                        <p>${Math.round(currentReport.confidence * 100)}%</p>
+                    </div>
+                </div>
+            `;
+
+            // Get triage result from the full response
+            const nestedTriageResult = triageResult.triage_result || {};
+            
+            // Patient's Condition / Symptoms
+            html += `
+                <div class="report-card">
+                    <h3>🩺 Patient's Condition</h3>
+                    <div class="report-item">
+                        <p>${recommendation}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Possible Diagnosis / Conditions
+            const possibleConditions = nestedTriageResult.possible_conditions || [];
+            if (possibleConditions && possibleConditions.length > 0) {
+                html += `
+                    <div class="report-card">
+                        <h3>🔍 Possible Conditions</h3>
+                        <ul>
+                            ${possibleConditions.map(condition => `<li>${condition}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // Recommended Actions
+            if (triageResult.suggested_actions && triageResult.suggested_actions.length > 0) {
+                html += `
+                    <div class="report-card">
+                        <h3>📋 Recommended Actions</h3>
+                        <ul>
+                            ${triageResult.suggested_actions.map(action => `<li>${action}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            // Medications (if any)
+            const medications = nestedTriageResult.medications || [];
+            if (medications && medications.length > 0) {
+                html += `
+                    <div class="report-card">
+                        <h3>💊 Suggested Medications</h3>
+                        <ul>
+                            ${medications.map(med => `<li>${med}</li>`).join('')}
+                        </ul>
+                        <p style="font-size: 12px; color: #666; margin-top: 10px;">
+                            <em>Note: These are suggestions only. Consult a pharmacist or doctor before taking any medication.</em>
+                        </p>
+                    </div>
+                `;
+            }
+
+            // Care pathway - only show if it exists and has valid data
+            if (triageResult.care_pathway && triageResult.care_pathway.recommended_pathway && 
+                triageResult.care_pathway.recommended_pathway !== 'no_action') {
+                const pathway = triageResult.care_pathway;
+                html += `
+                    <div class="report-card">
+                        <h3>🏥 Care Pathway</h3>
+                        <div class="report-item">
+                            <strong>Recommended Path</strong>
+                            <p>${pathway.recommended_pathway}</p>
+                        </div>
+                        ${pathway.urgency_timeframe ? `
+                            <div class="report-item">
+                                <strong>Timeframe</strong>
+                                <p>${pathway.urgency_timeframe}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+
+            // Disclaimer
+            html += `
+                <div class="report-card" style="background: #fef3c7; border-left: 4px solid #f59e0b;">
+                    <div class="report-item">
+                        <strong>⚠️ Important Disclaimer</strong>
+                        <p style="font-size: 13px;">${triageResult.disclaimer || 'This is not a substitute for professional medical advice. Always consult a qualified healthcare provider for diagnosis and treatment.'}</p>
+                    </div>
+                </div>
+            `;
+
+            reportDiv.innerHTML = html;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Disable input
+            input.disabled = true;
+            sendButton.disabled = true;
+
+            // Add user message
+            addMessage(message, true);
+            input.value = '';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Send to API
+                const response = await fetch('http://localhost:8000/chat/triage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        patient_id: patientId,
+                        message: message,
+                        include_history: true
+                    })
+                });
+
+                const result = await response.json();
+                
+                // Remove typing indicator
+                removeTypingIndicator();
+
+                // Check for emergency
+                if (result.severity === 'emergency' || result.needs_escalation) {
+                    // Show emergency modal
+                    showEmergencyModal(result.recommendation);
+                }
+
+                // Add AI response
+                addMessage(result.recommendation);
+
+                // Update medical report
+                updateReport(result);
+
+                // Store in history
+                conversationHistory.push({
+                    user: message,
+                    assistant: result.recommendation
+                });
+
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Sorry, I encountered an error. Please make sure the server is running on http://localhost:8000');
+                console.error('Error:', error);
+            }
+
+            // Re-enable input
+            input.disabled = false;
+            sendButton.disabled = false;
+            input.focus();
+        }
+
+        // Emergency Functions
+        function showEmergencyModal(message) {
+            const overlay = document.getElementById('emergencyOverlay');
+            const messageEl = document.getElementById('emergencyMessage');
+            
+            if (message) {
+                messageEl.textContent = message;
+            }
+            
+            overlay.classList.add('active');
+            
+            // Play alert sound (browser beep)
+            playEmergencySound();
+        }
+
+        function closeEmergencyModal() {
+            const overlay = document.getElementById('emergencyOverlay');
+            const callingAnimation = document.getElementById('callingAnimation');
+            
+            overlay.classList.remove('active');
+            callingAnimation.classList.remove('active');
+        }
+
+        function initiateEmergencyCall() {
+            const callButton = document.querySelector('.emergency-call-button');
+            const callingAnimation = document.getElementById('callingAnimation');
+            
+            // Hide button and show calling animation
+            callButton.style.display = 'none';
+            callingAnimation.classList.add('active');
+            
+            // Simulate call duration (5 seconds)
+            setTimeout(() => {
+                callingAnimation.innerHTML = `
+                    <div style="color: #059669; font-size: 20px; font-weight: bold; margin-bottom: 10px;">
+                        ✅ Emergency Services Contacted
+                    </div>
+                    <div style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                        (This was a simulation - In a real emergency, call 000 immediately)
+                    </div>
+                    <div style="background: #d1fae5; padding: 15px; border-radius: 10px; text-align: left;">
+                        <strong style="color: #065f46;">What happens next:</strong>
+                        <ul style="margin-top: 10px; color: #047857;">
+                            <li>Paramedics have been dispatched to your location</li>
+                            <li>Estimated arrival time: 8-12 minutes</li>
+                            <li>Stay on the line with the operator</li>
+                            <li>Follow all instructions given</li>
+                        </ul>
+                    </div>
+                `;
+            }, 3000);
+        }
+
+        function playEmergencySound() {
+            // Create audio context for beep sound
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.value = 800; // Frequency in hertz
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                // Play again after delay for double beep
+                setTimeout(() => {
+                    const oscillator2 = audioContext.createOscillator();
+                    const gainNode2 = audioContext.createGain();
+                    
+                    oscillator2.connect(gainNode2);
+                    gainNode2.connect(audioContext.destination);
+                    
+                    oscillator2.frequency.value = 800;
+                    oscillator2.type = 'sine';
+                    
+                    gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    
+                    oscillator2.start(audioContext.currentTime);
+                    oscillator2.stop(audioContext.currentTime + 0.5);
+                }, 600);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+    "case_id": "dd6d108c-375a-4c4f-8ee6-cf86dca7eb98",
+    "created_at": "2025-11-01T01:58:35.487520",
+    "status": "active",
+    "conversation": [
+        "I have severe chest pain and difficulty breathing for 30 minutes"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Chest pain",
+        "duration_days": null,
+        "severity_self": "Severe",
+        "associated_symptoms": [
+            "Difficulty breathing"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Patient is experiencing severe chest pain and difficulty breathing for an extended period of 30 minutes, indicating a potential cardiac emergency.",
+        "recommended_action": "emergency",
+        "red_flags_triggered": [
+            "Severe chest pain",
+            "Difficulty breathing"
+        ],
+        "care_instructions": [
+            "Call emergency services immediately. If available, administer oxygen via mask or non-rebreather mask. Stay on the phone with emergency services and follow their instructions."
+        ]
+    },
+    "action": {
+        "type": "emergency",
+        "urgency": "immediate",
+        "instructions": [
+            "Call emergency services immediately. If available, administer oxygen via mask or non-rebreather mask. Stay on the phone with emergency services and follow their instructions.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": null
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, patient-friendly way:\n\n\"We've assessed your situation as requiring immediate attention. Please call emergency services right away for guidance and support. Our goal is to get you the care you need as quickly and safely as possible - just stay on the line with the emergency team and follow their instructions.\"",
+        "clinician_summary": "Chief complaint: Chest pain. Duration: unknown. Associated symptoms: Difficulty breathing. Triage level: RED. Rationale: Patient is experiencing severe chest pain and difficulty breathing for an extended period of 30 minutes, indicating a potential cardiac emergency.. Red flags: Severe chest pain, Difficulty breathing. Recommended action: emergency."
+    }
+}

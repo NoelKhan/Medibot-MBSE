@@ -1,0 +1,156 @@
+/**
+ * Auth Persistence Service
+ * ========================
+ * Handles persistent storage of authentication state using Expo SecureStore
+ * Maintains login state across app restarts
+ */
+
+import * as SecureStore from 'expo-secure-store';
+import { User } from '../types/User';
+import { createLogger } from './Logger';
+
+const logger = createLogger('AuthPersistenceService');
+
+const AUTH_TOKEN_KEY = 'medibot_auth_token';
+const USER_DATA_KEY = 'medibot_user_data';
+const AUTH_TIMESTAMP_KEY = 'medibot_auth_timestamp';
+
+export interface AuthState {
+  user: User;
+  token: string;
+  timestamp: number;
+}
+
+class AuthPersistenceService {
+  private static instance: AuthPersistenceService;
+
+  private constructor() {}
+
+  public static getInstance(): AuthPersistenceService {
+    if (!AuthPersistenceService.instance) {
+      AuthPersistenceService.instance = new AuthPersistenceService();
+    }
+    return AuthPersistenceService.instance;
+  }
+
+  /**
+   * Save authentication state to secure storage
+   */
+  async saveAuthState(user: User, token?: string): Promise<void> {
+    try {
+      const timestamp = Date.now();
+      
+      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(user));
+      await SecureStore.setItemAsync(AUTH_TIMESTAMP_KEY, timestamp.toString());
+      
+      if (token) {
+        await SecureStore.setItemAsync(AUTH_TOKEN_KEY, token);
+      }
+
+      logger.info('Auth state saved successfully', { userId: user.id });
+    } catch (error) {
+      logger.error('Failed to save auth state', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Load authentication state from secure storage
+   */
+  async loadAuthState(): Promise<AuthState | null> {
+    try {
+      const userDataStr = await SecureStore.getItemAsync(USER_DATA_KEY);
+      const token = await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+      const timestampStr = await SecureStore.getItemAsync(AUTH_TIMESTAMP_KEY);
+
+      if (!userDataStr) {
+        logger.info('No saved auth state found');
+        return null;
+      }
+
+      const user = JSON.parse(userDataStr) as User;
+      const timestamp = timestampStr ? parseInt(timestampStr, 10) : Date.now();
+
+      // Check if session is expired (30 days)
+      const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+      if (Date.now() - timestamp > thirtyDaysMs) {
+        logger.warn('Auth session expired, clearing state', { timestamp });
+        await this.clearAuthState();
+        return null;
+      }
+
+      logger.info('Auth state loaded successfully', { userId: user.id });
+      return {
+        user,
+        token: token || '',
+        timestamp,
+      };
+    } catch (error) {
+      logger.error('Failed to load auth state', error);
+      return null;
+    }
+  }
+
+  /**
+   * Clear authentication state (logout)
+   */
+  async clearAuthState(): Promise<void> {
+    try {
+      await SecureStore.deleteItemAsync(AUTH_TOKEN_KEY);
+      await SecureStore.deleteItemAsync(USER_DATA_KEY);
+      await SecureStore.deleteItemAsync(AUTH_TIMESTAMP_KEY);
+      logger.info('Auth state cleared successfully');
+    } catch (error) {
+      logger.error('Failed to clear auth state', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Check if user is logged in (has saved auth state)
+   */
+  async isLoggedIn(): Promise<boolean> {
+    const authState = await this.loadAuthState();
+    return authState !== null;
+  }
+
+  /**
+   * Update user data without changing token
+   */
+  async updateUserData(user: User): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(USER_DATA_KEY, JSON.stringify(user));
+      logger.info('User data updated successfully', { userId: user.id });
+    } catch (error) {
+      logger.error('Failed to update user data', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get stored auth token
+   */
+  async getAuthToken(): Promise<string | null> {
+    try {
+      return await SecureStore.getItemAsync(AUTH_TOKEN_KEY);
+    } catch (error) {
+      logger.error('Failed to get auth token', error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if user is a guest
+   */
+  async isGuest(): Promise<boolean> {
+    const authState = await this.loadAuthState();
+    if (!authState) return true;
+    
+    // Check if user has guest-like properties
+    return authState.user.email?.includes('guest') || 
+           authState.user.id?.includes('guest') ||
+           false;
+  }
+}
+
+export default AuthPersistenceService;

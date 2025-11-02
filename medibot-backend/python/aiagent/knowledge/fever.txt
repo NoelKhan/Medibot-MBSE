@@ -1,0 +1,11 @@
+[Condition]: Fever
+[Category]: Self-care
+[Content]:
+- Keep fluids up.
+- Use paracetamol/ibuprofen according to label instructions.
+- Rest and monitor temperature.
+[Escalate if]:
+- Fever > 39°C for 3+ days
+- Rash or stiff neck
+- Vomiting or confusion
+[Source]: health.gov.au

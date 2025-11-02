@@ -1,0 +1,39 @@
+{
+    "case_id": "2e65021c-c336-493b-8f69-d9ef9539d3cc",
+    "created_at": "2025-11-01T01:54:27.288913",
+    "status": "active",
+    "conversation": [
+        "I have severe chest pain and difficulty breathing"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "I have severe chest pain and difficulty breathing",
+        "raw_output": "{\n  \"chief_complaint\": \"Chest pain\",\n  \"duration_days\": 1,\n  \"severity_self\": 10,\n  \"associated_symptoms\": [\"Difficulty breathing\"],\n  \"risk_factors\": [],\n  \"age_band\": null,\n  \"medications\": [],\n  \"allergies\": []\n}"
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Severe chest pain and difficulty breathing are indicative of a serious medical condition that requires immediate attention. The patient's symptoms warrant emergency intervention to prevent potential complications.",
+        "recommended_action": "emergency",
+        "red_flags_triggered": [
+            "chest pain",
+            "difficulty breathing"
+        ],
+        "care_instructions": [
+            "Call emergency services immediately. Seek immediate medical attention at the nearest hospital or urgent care center."
+        ]
+    },
+    "action": {
+        "type": "emergency",
+        "urgency": "immediate",
+        "instructions": [
+            "Call emergency services immediately. Seek immediate medical attention at the nearest hospital or urgent care center.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": null
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, and patient-friendly way:\n\n\"Your symptoms are very concerning and require immediate attention. We strongly recommend that you call emergency services right away to get help as quickly as possible. Please go to the nearest hospital or urgent care center for further evaluation and treatment - your health and safety are our top priority.\"",
+        "clinician_summary": "Chief complaint: I have severe chest pain and difficulty breathing. Duration: unknown. Associated symptoms: . Triage level: RED. Rationale: Severe chest pain and difficulty breathing are indicative of a serious medical condition that requires immediate attention. The patient's symptoms warrant emergency intervention to prevent potential complications.. Red flags: chest pain, difficulty breathing. Recommended action: emergency."
+    }
+}

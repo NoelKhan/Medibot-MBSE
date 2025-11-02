@@ -1,0 +1,49 @@
+{
+    "case_id": "56c9753d-7650-440f-9496-9a282d689a5c",
+    "created_at": "2025-11-01T02:01:01.713491",
+    "status": "active",
+    "conversation": [
+        "I have a rash that has been spreading for 2 days"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Rash",
+        "duration_days": 2.0,
+        "severity_self": null,
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "AMBER",
+        "rationale": "The rash has been spreading for 2 days, which may indicate an infectious cause. Further evaluation is needed to determine the underlying cause and potential risk to the patient.",
+        "recommended_action": "referral",
+        "red_flags_triggered": [
+            "spreading rash",
+            "infectious cause"
+        ],
+        "care_instructions": [
+            "Monitor the rash for signs of worsening or spreading",
+            "Keep the area clean and dry",
+            "Seek further evaluation by a GP/telehealth provider within 24-48 hours"
+        ]
+    },
+    "action": {
+        "type": "referral",
+        "urgency": "soon",
+        "instructions": [
+            "Monitor the rash for signs of worsening or spreading",
+            "Keep the area clean and dry",
+            "Seek further evaluation by a GP/telehealth provider within 24-48 hours",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": "general",
+        "resources": [],
+        "follow_up_due": "2025-11-02T14:01:28.327067"
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, patient-friendly way:\n\n\"We've assessed your symptoms and we're concerned about the rash you're experiencing. We want to ensure it doesn't get worse or spread, so please take good care of it by keeping it clean and dry. Please schedule an appointment with your primary care physician or our telehealth service within 24-48 hours so we can further evaluate your condition together.\"",
+        "clinician_summary": "Chief complaint: Rash. Duration: unknown. Associated symptoms: . Triage level: AMBER. Rationale: The rash has been spreading for 2 days, which may indicate an infectious cause. Further evaluation is needed to determine the underlying cause and potential risk to the patient.. Red flags: spreading rash, infectious cause. Recommended action: referral."
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "case_id": "758df0c4-5937-47ef-b3f9-b180e1c540af",
+    "created_at": "2025-11-01T13:00:45.233476",
+    "status": "active",
+    "conversation": [
+        "I have a runny nose"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "runny nose",
+        "duration_days": null,
+        "severity_self": null,
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "GREEN",
+        "rationale": "Runny nose is a common, self-limiting symptom that can be managed with over-the-counter medications and home care. Without additional symptoms or risk factors, this patient can safely manage their condition at home.",
+        "recommended_action": "self-care",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "Use saline nasal sprays or drops to help moisturize the nasal passages.",
+            "Consider over-the-counter decongestants or antihistamines if symptoms worsen."
+        ]
+    },
+    "action": {
+        "type": "self-care",
+        "urgency": "routine",
+        "instructions": [
+            "Use saline nasal sprays or drops to help moisturize the nasal passages.",
+            "Consider over-the-counter decongestants or antihistamines if symptoms worsen.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": "2025-11-02T13:01:07.978587"
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, and patient-friendly way:\n\n\"Your symptoms have been assessed as mild, and we recommend taking some self-care steps to help manage them. You can try using saline nasal sprays or drops to keep your nasal passages moisturized, and if your symptoms persist or worsen, you can consider over-the-counter decongestants or antihistamines. Don't worry - this is not a substitute for medical care, so please reach out to a healthcare professional if you're unsure or concerned about your symptoms.\"",
+        "clinician_summary": "Chief complaint: runny nose. Duration: unknown. Associated symptoms: . Triage level: GREEN. Rationale: Runny nose is a common, self-limiting symptom that can be managed with over-the-counter medications and home care. Without additional symptoms or risk factors, this patient can safely manage their condition at home.. Recommended action: self-care."
+    }
+}

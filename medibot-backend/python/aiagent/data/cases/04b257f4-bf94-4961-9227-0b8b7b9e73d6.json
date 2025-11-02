@@ -1,0 +1,41 @@
+{
+    "case_id": "04b257f4-bf94-4961-9227-0b8b7b9e73d6",
+    "created_at": "2025-10-28T17:15:14.736070",
+    "status": "active",
+    "conversation": [
+        "Coughing up blood and chest pain"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Coughing up blood",
+        "duration_days": null,
+        "severity_self": "Severe",
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Blood in sputum and chest pain are red flags for severe conditions like pulmonary embolism or pneumothorax. These require immediate medical attention.",
+        "recommended_action": "Emergency department visit",
+        "red_flags_triggered": [
+            "blood in sputum",
+            "chest pain"
+        ],
+        "care_instructions": "Call 911 or go to the emergency room immediately."
+    },
+    "action": {
+        "action_type": "Emergency department visit",
+        "tasks": [
+            "Rest and hydrate.",
+            "If symptoms worsen, seek medical help promptly.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "follow_up_due": "2025-10-29T05:15:49.652839"
+    },
+    "summary": {
+        "user": "### \ud83e\ude7a Summary for You\n- What you reported: Coughing up blood and chest pain\n- Triage level: **RED**\n- Reasoning: Blood in sputum and chest pain are red flags for severe conditions like pulmonary embolism or pneumothorax. These require immediate medical attention.\n- What to do now: **Emergency department visit**\n- Next steps:\n  - Rest and hydrate.\n  - If symptoms worsen, seek medical help promptly.\n  - This information is not medical advice. Seek professional help if uncertain.\n- Follow-up due: 2025-10-29T05:15:49.652839\n\n> \u26a0\ufe0f This information is for triage support and not a medical diagnosis.",
+        "clinician": "### \ud83d\udc69\u200d\u2695\ufe0f Clinician Handover Summary\n- Chief complaint: Coughing up blood\n- Duration (days): None\n- Associated symptoms: None\n- Severity (self): Severe\n- Triage level: RED\n- Rationale: Blood in sputum and chest pain are red flags for severe conditions like pulmonary embolism or pneumothorax. These require immediate medical attention.\n- Red flags: blood in sputum, chest pain\n- Recommended action: Emergency department visit\n- Tasks / Care Instructions:\n  - Rest and hydrate.\n  - If symptoms worsen, seek medical help promptly.\n  - This information is not medical advice. Seek professional help if uncertain.\n- Follow-up due: 2025-10-29T05:15:49.652839"
+    }
+}

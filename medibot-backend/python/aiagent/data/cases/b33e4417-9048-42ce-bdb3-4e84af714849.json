@@ -1,0 +1,40 @@
+{
+    "case_id": "b33e4417-9048-42ce-bdb3-4e84af714849",
+    "created_at": "2025-11-01T13:05:56.531336",
+    "status": "active",
+    "conversation": [
+        "I am having crushing chest pain that radiates to my left arm and jaw, I am sweating profusely and cannot breathe"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "I am having crushing chest pain that radiates to my left arm and jaw, I am sweating profusely and cannot breathe",
+        "raw_output": "{\n  \"chief_complaint\": \"Crushing chest pain\",\n  \"duration_days\": 1,\n  \"severity_self\": 10,\n  \"associated_symptoms\": [\"Radiating pain to left arm\", \"Sweating\", \"Difficulty breathing\"],\n  \"risk_factors\": [],\n  \"age_band\": null,\n  \"medications\": [],\n  \"allergies\": []\n}"
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Acute chest pain radiating to the arm and jaw, accompanied by sweating and difficulty breathing, is highly suggestive of a myocardial infarction (heart attack). The patient's symptoms are severe and require immediate medical attention.",
+        "recommended_action": "emergency",
+        "red_flags_triggered": [
+            "Radiating chest pain",
+            "Sweating",
+            "Difficulty breathing"
+        ],
+        "care_instructions": [
+            "Call emergency services immediately. If available, administer oxygen via mask. Do not delay seeking medical help."
+        ]
+    },
+    "action": {
+        "type": "emergency",
+        "urgency": "immediate",
+        "instructions": [
+            "Call emergency services immediately. If available, administer oxygen via mask. Do not delay seeking medical help.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": null
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear and empathetic tone:\n\n\"Unfortunately, based on what you've told us, we're concerned that your condition requires immediate attention. Please call emergency services right away so we can get you the help you need as quickly as possible. Don't hesitate to seek medical assistance - every minute counts.\"\n\nThis rewritten version aims to convey a sense of urgency and concern while still being patient-friendly and non-judgmental.",
+        "clinician_summary": "Chief complaint: I am having crushing chest pain that radiates to my left arm and jaw, I am sweating profusely and cannot breathe. Duration: unknown. Associated symptoms: . Triage level: RED. Rationale: Acute chest pain radiating to the arm and jaw, accompanied by sweating and difficulty breathing, is highly suggestive of a myocardial infarction (heart attack). The patient's symptoms are severe and require immediate medical attention.. Red flags: Radiating chest pain, Sweating, Difficulty breathing. Recommended action: emergency."
+    }
+}

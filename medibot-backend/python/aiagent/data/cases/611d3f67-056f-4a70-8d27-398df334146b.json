@@ -1,0 +1,44 @@
+{
+    "case_id": "611d3f67-056f-4a70-8d27-398df334146b",
+    "created_at": "2025-11-01T13:01:42.350365",
+    "status": "active",
+    "conversation": [
+        "Severe chest pain and difficulty breathing"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Chest pain",
+        "duration_days": null,
+        "severity_self": "severe",
+        "associated_symptoms": [
+            "difficulty breathing"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "UNKNOWN",
+        "rationale": "Could not parse LLM JSON response.",
+        "recommended_action": "manual review",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "{\n  \"severity_level\": \"RED\",\n  \"rationale\": \"Severe chest pain and difficulty breathing are indicative of a potentially life-threatening condition requiring immediate medical attention.\",\n  \"recommended_action\": \"emergency\",\n  \"red_flags_triggered\": [\"difficulty breathing\", \"chest pain\"],\n  \"care_instructions\": [\"Call emergency services immediately. If available, administer oxygen via mask or non-rebreather mask. Monitor vital signs closely.\"\n}"
+        ]
+    },
+    "action": {
+        "type": "manual review",
+        "urgency": "routine",
+        "instructions": [
+            "{\n  \"severity_level\": \"RED\",\n  \"rationale\": \"Severe chest pain and difficulty breathing are indicative of a potentially life-threatening condition requiring immediate medical attention.\",\n  \"recommended_action\": \"emergency\",\n  \"red_flags_triggered\": [\"difficulty breathing\", \"chest pain\"],\n  \"care_instructions\": [\"Call emergency services immediately. If available, administer oxygen via mask or non-rebreather mask. Monitor vital signs closely.\"\n}",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": "2025-11-02T01:02:01.579555"
+    },
+    "summary": {
+        "patient_summary": "Based on your symptoms, you've been triaged as UNKNOWN. Recommended action: manual review. Instructions: {\n  \"severity_level\": \"RED\",\n  \"rationale\": \"Severe chest pain and difficulty breathing are indicative of a potentially life-threatening condition requiring immediate medical attention.\",\n  \"recommended_action\": \"emergency\",\n  \"red_flags_triggered\": [\"difficulty breathing\", \"chest pain\"],\n  \"care_instructions\": [\"Call emergency services immediately. If available, administer oxygen via mask or non-rebreather mask. Monitor vital signs closely.\"\n}; This information is not medical advice. Seek professional help if uncertain.. This is not a medical diagnosis. Seek professional help if symptoms worsen.",
+        "clinician_summary": "Chief complaint: Chest pain. Duration: unknown. Associated symptoms: difficulty breathing. Triage level: UNKNOWN. Rationale: Could not parse LLM JSON response.. Recommended action: manual review."
+    }
+}

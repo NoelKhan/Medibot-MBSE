@@ -1,0 +1,47 @@
+{
+    "case_id": "097f93dd-05a2-4ad7-83fe-ebc75eed0eb2",
+    "created_at": "2025-11-01T12:54:48.706611",
+    "status": "active",
+    "conversation": [
+        "I have severe chest pain radiating to my left arm"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Chest pain",
+        "duration_days": null,
+        "severity_self": "Severe",
+        "associated_symptoms": [
+            "Radiating pain"
+        ],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Severe chest pain radiating to the left arm is a concerning symptom that may indicate an acute coronary syndrome or other serious cardiac conditions. Immediate medical attention is required.",
+        "recommended_action": "emergency",
+        "red_flags_triggered": [
+            "Radiating pain",
+            "Chest pain"
+        ],
+        "care_instructions": [
+            "Call emergency services immediately, seek immediate hospital care, and try to remain calm"
+        ]
+    },
+    "action": {
+        "type": "emergency",
+        "urgency": "immediate",
+        "instructions": [
+            "Call emergency services immediately, seek immediate hospital care, and try to remain calm",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": null
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, and patient-friendly way:\n\n\"I've assessed your situation, and unfortunately, it looks like you need immediate attention. Please call emergency services right away and get to the hospital as quickly as possible - a medical team is waiting to help. Remember, I'm here to guide you through this, and don't worry about trying to handle things on your own - just focus on getting the care you need.\"",
+        "clinician_summary": "Chief complaint: Chest pain. Duration: unknown. Associated symptoms: Radiating pain. Triage level: RED. Rationale: Severe chest pain radiating to the left arm is a concerning symptom that may indicate an acute coronary syndrome or other serious cardiac conditions. Immediate medical attention is required.. Red flags: Radiating pain, Chest pain. Recommended action: emergency."
+    }
+}

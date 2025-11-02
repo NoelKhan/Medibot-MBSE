@@ -1,0 +1,36 @@
+{
+    "case_id": "7c3201b9-77d1-40c5-9205-a6bdeda78b41",
+    "created_at": "2025-10-28T17:06:39.124325",
+    "status": "active",
+    "conversation": [
+        "Blood while coughing"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Coughing up blood",
+        "duration_days": null,
+        "severity_self": null,
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Blood while coughing is a red flag for tuberculosis. It's important to seek medical attention immediately.",
+        "recommended_action": "Emergency department visit",
+        "red_flags_triggered": [
+            "tuberculosis"
+        ],
+        "care_instructions": "If TB is suspected, a chest X-ray and sputum smear should be ordered. Patient should be referred to an infectious disease specialist."
+    },
+    "action": {
+        "action_type": "Emergency department visit",
+        "tasks": [
+            "Rest and hydrate.",
+            "If symptoms worsen, seek medical help promptly.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "follow_up_due": "2025-10-29T05:07:19.064733"
+    }
+}

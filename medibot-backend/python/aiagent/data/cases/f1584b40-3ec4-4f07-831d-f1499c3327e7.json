@@ -1,0 +1,42 @@
+{
+    "case_id": "f1584b40-3ec4-4f07-831d-f1499c3327e7",
+    "created_at": "2025-11-01T01:59:56.287908",
+    "status": "active",
+    "conversation": [
+        "I have a mild headache"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "headache",
+        "duration_days": 1.0,
+        "severity_self": null,
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "GREEN",
+        "rationale": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+        "recommended_action": "self-care",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary."
+        ]
+    },
+    "action": {
+        "type": "self-care",
+        "urgency": "routine",
+        "instructions": [
+            "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "specialization": null,
+        "resources": [],
+        "follow_up_due": "2025-11-02T02:00:13.179051"
+    },
+    "summary": {
+        "patient_summary": "Here's a rewritten version of the triage summary in a clear, empathetic, and patient-friendly way:\n\n\"Based on what you've told us, we've classified your visit as low-risk. To keep yourself safe and comfortable, please focus on self-care at home. If you notice any of your symptoms worsening or if you experience new ones, don't hesitate to reach out for further guidance - we're here to support you.\"",
+        "clinician_summary": "Chief complaint: headache. Duration: unknown. Associated symptoms: . Triage level: GREEN. Rationale: The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.. Recommended action: self-care."
+    }
+}

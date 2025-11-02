@@ -1,0 +1,71 @@
+{
+    "case_id": "b51c0660-fe90-4ffb-ad7c-17224169f8b1",
+    "created_at": "2025-10-28T17:19:39.865815",
+    "status": "active",
+    "conversation": [
+        "Coughing up blood and chestpain"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "Coughing up blood",
+        "duration_days": null,
+        "severity_self": "Severe",
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "RED",
+        "rationale": "Blood in sputum and chest pain are red flags for pulmonary embolism. This is an emergency situation that requires immediate medical attention.",
+        "recommended_action": "Emergency department visit or call 911 immediately",
+        "red_flags_triggered": [
+            "Blood in sputum",
+            "Chest pain"
+        ],
+        "care_instructions": "If you are experiencing chest pain, shortness of breath, or difficulty speaking, call 911 immediately. If you have a pulmonary embolism, you will need to be treated with anticoagulant medications and possibly thrombectomy (a procedure to remove the clot)."
+    },
+    "action": {
+        "action_type": "Emergency department visit or call 911 immediately",
+        "tasks": [
+            "Rest and hydrate.",
+            "If symptoms worsen, seek medical help promptly.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "follow_up_due": "2025-10-29T05:20:21.548464"
+    },
+    "summary": {
+        "user": {
+            "what_you_reported": "Coughing up blood and chestpain",
+            "triage_level": "RED",
+            "reasoning": "Blood in sputum and chest pain are red flags for pulmonary embolism. This is an emergency situation that requires immediate medical attention.",
+            "what_to_do_now": "Emergency department visit or call 911 immediately",
+            "next_steps": [
+                "Rest and hydrate.",
+                "If symptoms worsen, seek medical help promptly.",
+                "This information is not medical advice. Seek professional help if uncertain."
+            ],
+            "follow_up_due": "2025-10-29T05:20:21.548464",
+            "note": "This information is for triage support and not a medical diagnosis."
+        },
+        "clinician": {
+            "chief_complaint": "Coughing up blood",
+            "duration_days": null,
+            "associated_symptoms": [],
+            "severity_self": "Severe",
+            "triage_level": "RED",
+            "rationale": "Blood in sputum and chest pain are red flags for pulmonary embolism. This is an emergency situation that requires immediate medical attention.",
+            "red_flags": [
+                "Blood in sputum",
+                "Chest pain"
+            ],
+            "recommended_action": "Emergency department visit or call 911 immediately",
+            "tasks": [
+                "Rest and hydrate.",
+                "If symptoms worsen, seek medical help promptly.",
+                "This information is not medical advice. Seek professional help if uncertain."
+            ],
+            "follow_up_due": "2025-10-29T05:20:21.548464"
+        }
+    }
+}

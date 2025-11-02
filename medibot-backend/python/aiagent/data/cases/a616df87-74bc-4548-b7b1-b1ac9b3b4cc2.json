@@ -1,0 +1,64 @@
+{
+    "case_id": "a616df87-74bc-4548-b7b1-b1ac9b3b4cc2",
+    "created_at": "2025-11-01T01:25:25.581925",
+    "status": "active",
+    "conversation": [
+        "I have a mild headache"
+    ],
+    "last_symptoms": {
+        "chief_complaint": "headache",
+        "duration_days": 1.0,
+        "severity_self": null,
+        "associated_symptoms": [],
+        "risk_factors": [],
+        "age_band": null,
+        "medications": [],
+        "allergies": []
+    },
+    "triage": {
+        "severity_level": "GREEN",
+        "rationale": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+        "recommended_action": "self-care",
+        "red_flags_triggered": [],
+        "care_instructions": [
+            "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary."
+        ]
+    },
+    "action": {
+        "action_type": "self-care",
+        "tasks": [
+            "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary.",
+            "This information is not medical advice. Seek professional help if uncertain."
+        ],
+        "follow_up_due": "2025-11-02T01:25:42.366383"
+    },
+    "summary": {
+        "user": {
+            "what_you_reported": "I have a mild headache",
+            "triage_level": "GREEN",
+            "reasoning": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+            "what_to_do_now": "self-care",
+            "next_steps": [
+                "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary.",
+                "This information is not medical advice. Seek professional help if uncertain."
+            ],
+            "follow_up_due": "2025-11-02T01:25:42.366383",
+            "note": "This information is for triage support and not a medical diagnosis."
+        },
+        "clinician": {
+            "chief_complaint": "headache",
+            "duration_days": 1.0,
+            "associated_symptoms": [],
+            "severity_self": null,
+            "triage_level": "GREEN",
+            "rationale": "The patient reports a mild headache with a short duration of 1 day. There are no associated symptoms or risk factors mentioned, suggesting it may be a self-limiting condition.",
+            "red_flags": [],
+            "recommended_action": "self-care",
+            "tasks": [
+                "Monitor for worsening symptoms, such as increased severity or new symptoms. Consider over-the-counter pain relief if necessary.",
+                "This information is not medical advice. Seek professional help if uncertain."
+            ],
+            "follow_up_due": "2025-11-02T01:25:42.366383"
+        }
+    }
+}

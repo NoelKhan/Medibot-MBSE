@@ -1,0 +1,64 @@
+{
+  "expo": {
+    "name": "MediBot",
+    "slug": "MediBot",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.medibot.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app needs access to camera to capture medical photos and documents.",
+        "NSPhotoLibraryUsageDescription": "This app needs access to photo library to select medical images for consultation.",
+        "NSMicrophoneUsageDescription": "This app needs access to microphone for voice recordings during medical consultations."
+      }
+    },
+    "android": {
+      "package": "com.medibot.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-mail-composer",
+      "expo-image-picker",
+      "expo-document-picker",
+      "expo-av",
+      "expo-font",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "51b258fe-4f36-43c1-9d78-bc23adcff7f4"
+      }
+    },
+    "owner": "noel5khan"
+  }
+}
