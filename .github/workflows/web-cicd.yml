@@ -5,13 +5,11 @@ on:
     branches: [main, develop, staging]
     paths:
       - 'medibot-web/**'
-      - 'shared/**'
       - '.github/workflows/web-cicd.yml'
   pull_request:
     branches: [main, develop]
     paths:
       - 'medibot-web/**'
-      - 'shared/**'
 
 env:
   NODE_VERSION: '20'
@@ -35,17 +33,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: |
-            medibot-web/package-lock.json
-            shared/package-lock.json
-
-      - name: Install shared dependencies
-        working-directory: ./shared
-        run: npm ci
-
-      - name: Build shared library
-        working-directory: ./shared
-        run: npm run build
+          cache-dependency-path: medibot-web/package-lock.json
 
       - name: Install web dependencies
         working-directory: ./medibot-web
