@@ -19,42 +19,78 @@ export interface ApiConfig {
 /**
  * Get API Base URL based on environment
  * 
- * For Expo Go development:
- * - iOS simulator: Use localhost or 127.0.0.1
- * - Android emulator: Use 10.0.2.2 (Android's special alias for host machine)
- * - Physical devices: Use your computer's local network IP (e.g., 192.168.x.x)
+ * DYNAMIC AUTO-DETECTION for any local OS context:
+ * - Automatically detects the Metro bundler host IP
+ * - Works on any network configuration
+ * - Supports simulators, emulators, and physical devices
+ * - Mimics remote/online workflow without hardcoded IPs
  * 
  * For production: Use deployed backend URL
  */
 const getApiBaseUrl = (): string => {
-  // Check environment variables first
-  const envBaseUrl = Constants.expoConfig?.extra?.apiBaseUrl || 
-                     process.env.EXPO_PUBLIC_API_BASE_URL;
+  // 1. Check environment variables first (highest priority)
+  const envBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL;
   
   if (envBaseUrl) {
+    logger.info('Using API URL from environment variable', { envBaseUrl });
     return envBaseUrl;
   }
 
-  // Development defaults based on platform
-  const { platform } = Constants;
-  
-  if (__DEV__) {
-    // For physical devices and Expo Go, use your computer's local IP
-    const LOCAL_IP = '192.168.0.158';
-    
-    // Always use local IP for Expo Go on physical devices
-    // Comment out the return below if using simulator/emulator
-    return `http://${LOCAL_IP}:3001`;
-    
-    // Uncomment below ONLY if using iOS Simulator
-    // return 'http://localhost:3001';
-    
-    // Uncomment below ONLY if using Android Emulator
-    // return 'http://10.0.2.2:3001';
+  // 2. Production mode - use deployed backend
+  if (!__DEV__) {
+    const prodUrl = 'https://api.medibot.com';
+    logger.info('Using production API URL', { prodUrl });
+    return prodUrl;
   }
 
-  // Production - replace with your deployed backend URL
-  return 'https://api.medibot.com';
+  // 3. Development mode - Auto-detect backend URL dynamically
+  try {
+    // Expo provides the debugger host which is the machine running Metro bundler
+    // For Expo Go: This is your development machine's IP
+    // Format: "192.168.x.x:8081" or "localhost:8081"
+    const debuggerHost = Constants.expoConfig?.hostUri || 
+                         Constants.manifest?.debuggerHost ||
+                         Constants.manifest2?.extra?.expoGo?.debuggerHost;
+    
+    if (debuggerHost) {
+      // Extract just the IP/hostname (remove port)
+      const host = debuggerHost.split(':')[0];
+      
+      // Determine if we're on simulator/emulator or physical device
+      const isSimulator = host === 'localhost' || host === '127.0.0.1';
+      const isAndroidEmulator = Constants.platform?.android && isSimulator;
+      
+      let backendUrl: string;
+      
+      if (isAndroidEmulator) {
+        // Android emulator uses special alias for host machine
+        backendUrl = 'http://10.0.2.2:3001';
+      } else if (isSimulator) {
+        // iOS simulator can use localhost
+        backendUrl = 'http://localhost:3001';
+      } else {
+        // Physical device - use the detected host IP
+        backendUrl = `http://${host}:3001`;
+      }
+      
+      logger.info('Auto-detected backend URL', { 
+        debuggerHost, 
+        host, 
+        backendUrl,
+        isSimulator,
+        isAndroidEmulator 
+      });
+      
+      return backendUrl;
+    }
+  } catch (error) {
+    logger.warn('Failed to auto-detect backend URL, using fallback', { error });
+  }
+
+  // 4. Fallback - try common local URLs in order
+  const fallbackUrl = 'http://192.168.0.158:3001';
+  logger.warn('Using fallback backend URL', { fallbackUrl });
+  return fallbackUrl;
 };
 
 export const API_CONFIG: ApiConfig = {
@@ -123,8 +159,59 @@ export const FEATURE_FLAGS = {
 // Offline detection timeout
 export const OFFLINE_TIMEOUT = 5000; // 5 seconds
 
-logger.info('API Configuration', {
+// Log API configuration on startup
+logger.info('API Configuration Initialized', {
   baseURL: API_CONFIG.baseURL,
   isDevelopment: __DEV__,
   useAPI: FEATURE_FLAGS.USE_API,
+  timeout: API_CONFIG.timeout,
+  retryAttempts: API_CONFIG.retryAttempts,
 });
+
+/**
+ * Test backend connectivity on startup
+ * This helps diagnose network issues immediately
+ */
+if (__DEV__) {
+  // Test health endpoint after a short delay to allow app initialization
+  setTimeout(async () => {
+    try {
+      logger.info('Testing backend connectivity...', { url: `${API_CONFIG.baseURL}/api/health` });
+      
+      const response = await fetch(`${API_CONFIG.baseURL}/api/health`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(5000), // 5 second timeout
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        logger.info('✅ Backend is reachable', { 
+          status: response.status,
+          url: API_CONFIG.baseURL,
+          health: data 
+        });
+      } else {
+        logger.warn('⚠️ Backend returned error status', { 
+          status: response.status,
+          url: API_CONFIG.baseURL 
+        });
+      }
+    } catch (error: any) {
+      logger.error('❌ Cannot reach backend - Network error', { 
+        url: API_CONFIG.baseURL,
+        error: error.message,
+        suggestion: 'Check that backend is running on the correct IP and port'
+      });
+      
+      // Log helpful debugging info
+      logger.info('Troubleshooting tips:', {
+        tip1: 'Verify backend is running: curl http://localhost:3001/api/health',
+        tip2: 'Check IP address matches your machine',
+        tip3: 'Ensure phone and computer are on same WiFi network',
+        tip4: 'Check firewall allows port 3001',
+        currentURL: API_CONFIG.baseURL,
+      });
+    }
+  }, 2000); // Wait 2 seconds after app starts
+}
