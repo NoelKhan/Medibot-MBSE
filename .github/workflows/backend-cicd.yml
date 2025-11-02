@@ -17,8 +17,6 @@ permissions:
 
 env:
   NODE_VERSION: '18.x'
-  # Set to 'self-hosted' to use self-hosted runners, or 'ubuntu-latest' for GitHub-hosted
-  RUNNER_TYPE: ubuntu-latest
   
 jobs:
   # ===========================
@@ -26,7 +24,7 @@ jobs:
   # ===========================
   lint:
     name: Lint & Type Check
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     
     steps:
       - name: Checkout code
@@ -63,7 +61,7 @@ jobs:
   # ===========================
   test:
     name: Unit & Integration Tests
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     
     services:
       postgres:
@@ -120,7 +118,7 @@ jobs:
   # ===========================
   security:
     name: Security Audit
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     
     steps:
       - name: Checkout code
@@ -149,7 +147,7 @@ jobs:
   # ===========================
   build:
     name: Build Docker Image
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     needs: [lint, test]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     
@@ -192,7 +190,7 @@ jobs:
   # ===========================
   deploy-staging:
     name: Deploy to Staging
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     needs: [build]
     if: github.ref == 'refs/heads/develop'
     environment:
@@ -212,7 +210,7 @@ jobs:
   # ===========================
   deploy-production:
     name: Deploy to Production
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     needs: [build]
     if: github.ref == 'refs/heads/main'
     environment:

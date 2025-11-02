@@ -192,6 +192,13 @@ dist/
 
 ## 3️⃣ Mobile App Execution
 
+### Prerequisites
+**Important**: This project requires React 19.x for compatibility with Expo SDK 54:
+```bash
+# If needed, update React version
+npm install react@19.1.0 react-dom@19.1.0 --save-exact
+```
+
 ### Method A: Expo Go (Development)
 ```bash
 # Navigate to mobile
@@ -199,6 +206,9 @@ cd medibot-mobile
 
 # Install dependencies
 npm install
+
+# Verify React version (should be 19.1.0)
+npm list react
 
 # Start Expo development server
 npm start
@@ -448,7 +458,56 @@ open http://localhost:3000
 
 ---
 
-## 📝 Summary
+## � Troubleshooting
+
+### Mobile App Issues
+
+#### React Version Mismatch
+If you encounter errors related to React hooks or compatibility:
+```bash
+cd medibot-mobile
+
+# Check current React version
+npm list react
+
+# Install the correct version (React 19.1.0 for Expo SDK 54)
+npm install react@19.1.0 react-dom@19.1.0 --save-exact
+
+# Clear cache and restart
+npx expo start --clear
+```
+
+#### Metro Bundler Issues
+```bash
+# Clear all caches
+rm -rf node_modules
+npm install
+npx expo start --clear
+
+# If still having issues, reset Metro
+watchman watch-del-all
+rm -rf $TMPDIR/metro-*
+```
+
+#### Backend Connection Issues
+The mobile app auto-detects the backend URL, but if you have issues:
+```bash
+# Check the auto-detected URL in logs
+# Look for: "Auto-detected backend URL"
+
+# For physical devices, ensure:
+# 1. Phone and computer are on same WiFi
+# 2. Firewall allows port 3001
+# 3. Backend is running: curl http://localhost:3001/api/health
+
+# Manual override (if needed):
+export EXPO_PUBLIC_API_BASE_URL=http://192.168.x.x:3001
+npm start
+```
+
+---
+
+## �📝 Summary
 
 | Capability | Backend | Web | Mobile |
 |------------|---------|-----|--------|

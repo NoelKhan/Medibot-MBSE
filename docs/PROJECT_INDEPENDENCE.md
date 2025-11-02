@@ -220,6 +220,11 @@ npm run dev
 # Start only mobile
 cd medibot-mobile
 npm install
+
+# Ensure React 19.1.0 is installed (required for Expo SDK 54)
+npm list react  # Should show react@19.1.0
+# If not, run: npm install react@19.1.0 react-dom@19.1.0 --save-exact
+
 npm start
 
 # Scan QR with Expo Go

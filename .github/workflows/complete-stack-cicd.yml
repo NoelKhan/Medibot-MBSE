@@ -33,7 +33,7 @@ jobs:
   
   backend-build:
     name: Backend - Build & Test
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     
     services:
       postgres:
@@ -116,7 +116,7 @@ jobs:
 
   ai-agent-build:
     name: AI Agent - Build & Test
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
 
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -161,7 +161,7 @@ jobs:
   docker-backend:
     name: Docker - Backend Image
     needs: [backend-build]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     if: github.event_name == 'push'
     
     steps:
@@ -206,7 +206,7 @@ jobs:
   docker-ai-agent:
     name: Docker - AI Agent Image
     needs: [ai-agent-build]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     if: github.event_name == 'push'
     
     steps:
@@ -253,7 +253,7 @@ jobs:
   web-build:
     name: Web - Build & Test
     needs: [backend-build, ai-agent-build]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
 
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -301,7 +301,7 @@ jobs:
   docker-web:
     name: Docker - Web Image
     needs: [web-build]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     if: github.event_name == 'push'
     
     steps:
@@ -353,7 +353,7 @@ jobs:
   mobile-build:
     name: Mobile - Build & Test
     needs: [backend-build, ai-agent-build]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
 
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -411,7 +411,7 @@ jobs:
   deploy-kubernetes:
     name: Deploy to Kubernetes
     needs: [docker-backend, docker-ai-agent, docker-web]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
@@ -486,7 +486,7 @@ jobs:
   integration-tests:
     name: Integration Tests
     needs: [deploy-kubernetes]
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     if: github.event_name == 'push'
 
     steps:

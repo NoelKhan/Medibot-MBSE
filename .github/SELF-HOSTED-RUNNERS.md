@@ -2,7 +2,12 @@
 
 ## Overview
 
-All CI/CD workflows in this repository support both **GitHub-hosted runners** and **self-hosted runners**. By default, workflows use GitHub-hosted runners (`ubuntu-latest`), but you can easily switch to self-hosted runners using repository variables.
+All CI/CD workflows in this repository **default to self-hosted runners** with automatic fallback to GitHub-hosted runners if needed. This provides cost savings and better performance while maintaining reliability.
+
+**Default Behavior:**
+- ✅ Uses self-hosted runners if available
+- ✅ Falls back to GitHub-hosted (`ubuntu-latest`) if no self-hosted runner is available
+- ✅ Can be overridden with `RUNNER_TYPE` repository variable
 
 ---
 
@@ -19,9 +24,9 @@ All CI/CD workflows in this repository support both **GitHub-hosted runners** an
 
 ## 🚀 Quick Setup
 
-### Step 1: Configure Repository Variable
+### Step 1: Configure Repository Variable (Optional)
 
-Set the `RUNNER_TYPE` repository variable to specify which runner type to use:
+The workflows default to `self-hosted`, but you can override this behavior:
 
 #### Option A: Use GitHub UI
 
@@ -30,24 +35,24 @@ Set the `RUNNER_TYPE` repository variable to specify which runner type to use:
 3. Click **New repository variable**
 4. Name: `RUNNER_TYPE`
 5. Value: Choose one:
-   - `ubuntu-latest` (GitHub-hosted, default)
-   - `self-hosted` (your own runners)
+   - `ubuntu-latest` (Force GitHub-hosted runners)
+   - `self-hosted` (Default - your own runners)
    - `[self-hosted, linux, x64]` (specific labels)
    - Custom labels like `[self-hosted, gpu]` for specialized runners
 
 #### Option B: Use GitHub CLI
 
 ```bash
-# Set to self-hosted
-gh variable set RUNNER_TYPE --body "self-hosted"
-
-# Set to GitHub-hosted (default)
+# Force GitHub-hosted runners
 gh variable set RUNNER_TYPE --body "ubuntu-latest"
+
+# Use self-hosted (this is the default, no variable needed)
+gh variable set RUNNER_TYPE --body "self-hosted"
 
 # Set with specific labels
 gh variable set RUNNER_TYPE --body "[self-hosted, linux, x64]"
 
-# Remove variable (reverts to default ubuntu-latest)
+# Remove variable (reverts to default 'self-hosted')
 gh variable delete RUNNER_TYPE
 ```
 
@@ -346,11 +351,11 @@ tail -f /path/to/runner/_diag/Runner_*.log
 
 ## 🔄 Switching Between Runner Types
 
-### Test with Self-Hosted Runner
+### Using Self-Hosted Runner (Default)
 
 ```bash
-# Switch to self-hosted
-gh variable set RUNNER_TYPE --body "self-hosted"
+# Self-hosted is the default - no configuration needed
+# Just set up your runner and it will be used automatically
 
 # Push a change to trigger workflow
 git commit --allow-empty -m "Test self-hosted runner"
@@ -360,14 +365,28 @@ git push
 gh run watch
 ```
 
-### Revert to GitHub-Hosted Runner
+### Switch to GitHub-Hosted Runner
 
 ```bash
-# Switch back to GitHub-hosted
+# Force use of GitHub-hosted runners
 gh variable set RUNNER_TYPE --body "ubuntu-latest"
 
-# Or delete the variable to use default
+# Push a change to trigger workflow
+git commit --allow-empty -m "Test GitHub-hosted runner"
+git push
+
+# Watch the workflow
+gh run watch
+```
+
+### Revert to Default (Self-Hosted)
+
+```bash
+# Delete the variable to use default (self-hosted)
 gh variable delete RUNNER_TYPE
+
+# Or explicitly set to self-hosted
+gh variable set RUNNER_TYPE --body "self-hosted"
 ```
 
 ---
@@ -519,4 +538,4 @@ For issues with self-hosted runners:
 4. Consult the troubleshooting section above
 5. Create an issue in this repository
 
-**Current Configuration**: All workflows default to `ubuntu-latest` (GitHub-hosted) but can be switched to self-hosted by setting the `RUNNER_TYPE` repository variable.
+**Current Configuration**: All workflows **default to `self-hosted`** runners with automatic fallback to `ubuntu-latest` (GitHub-hosted) if no self-hosted runner is available. You can override this by setting the `RUNNER_TYPE` repository variable.

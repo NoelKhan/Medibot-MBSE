@@ -102,7 +102,8 @@ MediBot is a sophisticated React Native healthcare application that provides int
 ## 🚀 Quick Start
 
 ### Prerequisites
-- **Node.js**: 18.0+ 
+- **Node.js**: 20.x (recommended)
+- **React**: 19.1.0 (required for Expo SDK 54)
 - **npm/yarn**: Latest version
 - **Expo CLI**: `npm install -g @expo/cli`
 - **Mobile Device or Emulator**: iOS 12+ / Android 8+
@@ -120,6 +121,12 @@ MediBot is a sophisticated React Native healthcare application that provides int
    npm install
    # or
    yarn install
+   
+   # Verify React version (should be 19.1.0)
+   npm list react
+   
+   # If React version is incorrect, install the correct version:
+   npm install react@19.1.0 react-dom@19.1.0 --save-exact
    ```
 
 3. **Configure Environment**

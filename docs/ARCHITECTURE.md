@@ -103,10 +103,16 @@ API_URL=http://localhost:3001/api
 AI_AGENT_URL=http://localhost:8000
 ```
 
+#### Prerequisites:
+- React 19.x required for Expo SDK 54 compatibility
+- Node.js 20.x
+
 #### Standalone Execution:
 ```bash
 cd medibot-mobile
 npm install
+# Ensure React 19.1.0 is installed
+npm list react  # Should show react@19.1.0
 npm start  # Start Expo Metro bundler
 # Then scan QR code with Expo Go app
 # OR:

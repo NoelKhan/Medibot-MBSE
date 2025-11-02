@@ -645,11 +645,19 @@ npm run dev
 
 ### 4. Mobile App (Optional)
 
+> **📱 Note:** Mobile app requires React 19.1.0 for Expo SDK 54 compatibility
+
 #### Step 4.1: Install Dependencies
 
 ```bash
 cd medibot-mobile
 npm install
+
+# Ensure React 19.1.0 is installed (required for Expo SDK 54)
+npm list react  # Should show react@19.1.0
+
+# If React version is incorrect, install the correct version:
+npm install react@19.1.0 react-dom@19.1.0 --save-exact
 
 # Install Expo CLI globally (if not already installed)
 npm install -g expo-cli
@@ -1148,27 +1156,63 @@ git push heroku main
 
 ## 🔄 CI/CD Pipeline
 
-Our GitHub Actions workflow (`/.github/workflows/complete-stack-cicd.yml`) automatically:
+Our GitHub Actions workflows automatically build, test, and deploy all components.
 
-**Phase 1: Build & Test**
-- Backend + AI Agent builds (parallel)
-- Run unit tests with PostgreSQL/Redis
+### 🎯 Features
+- ✅ **Automated builds** on every push to `main` or `develop`
+- ✅ **Docker images** published to GitHub Container Registry (ghcr.io)
+- ✅ **Parallel execution** for faster builds
+- ✅ **Security scanning** with npm audit and Snyk
+- ✅ **Self-hosted runner support** for cost savings and performance
 
-**Phase 2: Docker Images**  
-- Build & push to GitHub Container Registry (ghcr.io)
+### 📦 Pipeline Stages
 
-**Phase 3: Web Build**
-- React app build + Docker image
+**Backend Pipeline** (`.github/workflows/backend-cicd.yml`):
+1. Lint & Type Check
+2. Unit & Integration Tests
+3. Security Audit
+4. Build Docker Image → `ghcr.io/noelkhan/medibot-backend`
+5. Deploy to Production/Staging
 
-**Phase 4: Mobile Build**
-- React Native + Expo APK generation
+**AI Agent Pipeline** (`.github/workflows/ai-agent-cicd.yml`):
+1. Lint & Type Check
+2. Unit Tests
+3. Build Docker Image → `ghcr.io/noelkhan/medibot-ai-agent`
+4. Deploy to Kubernetes
 
-**Phase 5: Kubernetes Deploy**
-- Auto-deploy staging (develop branch)
-- Auto-deploy production (main branch)
+**Web Pipeline** (`.github/workflows/web-cicd.yml`):
+1. Lint & Build
+2. Build Docker Image → `ghcr.io/noelkhan/medibot-web`
+3. Deploy to Vercel (dev) or Kubernetes (prod)
 
-**Phase 6: Integration Tests**
-- Health checks + API tests
+**Mobile Pipeline** (`.github/workflows/mobile-cicd.yml`):
+1. Lint & Type Check
+2. Run Tests
+3. Build APK with Expo
+4. Upload artifacts
+
+### 🖥️ Self-Hosted Runners
+
+**All workflows support self-hosted runners!** Switch between GitHub-hosted and self-hosted runners for:
+- 💰 **Cost savings** - Unlimited build minutes
+- ⚡ **Better performance** - Custom hardware
+- 🔒 **Enhanced security** - Private network
+- 🎛️ **Custom configuration** - Pre-installed tools
+
+**Quick Setup:**
+```bash
+# Switch to self-hosted runners
+gh variable set RUNNER_TYPE --body "self-hosted"
+
+# Switch back to GitHub-hosted (default)
+gh variable set RUNNER_TYPE --body "ubuntu-latest"
+```
+
+**📖 Full Documentation**: [`.github/SELF-HOSTED-RUNNERS.md`](.github/SELF-HOSTED-RUNNERS.md)
+- Setup guides for Linux, macOS, Windows, and Docker
+- Security best practices
+- Monitoring and troubleshooting
+- Custom labels for specialized runners (GPU, high-memory, etc.)
 
 ### Setup GitHub Secrets
 
