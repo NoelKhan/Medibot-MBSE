@@ -11,10 +11,14 @@ on:
     paths:
       - 'medibot-web/**'
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   NODE_VERSION: '20'
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/medibot-web
+  IMAGE_NAME: noelkhan/medibot-web
 
 jobs:
   # ===========================================

@@ -13,11 +13,11 @@ export const databaseConfig = registerAs(
   'database',
   (): TypeOrmModuleOptions => ({
     type: 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    port: parseInt(process.env.DB_PORT, 10) || 5432,
-    username: process.env.DB_USERNAME || 'medibot',
-    password: process.env.DB_PASSWORD || 'medibot_dev_password',
-    database: process.env.DB_DATABASE || 'medibot_dev',
+    host: process.env.DATABASE_HOST || process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DATABASE_PORT || process.env.DB_PORT, 10) || 5432,
+    username: process.env.DATABASE_USER || process.env.DB_USERNAME || 'medibot',
+    password: process.env.DATABASE_PASSWORD || process.env.DB_PASSWORD || 'medibot_dev_password',
+    database: process.env.DATABASE_NAME || process.env.DB_DATABASE || 'medibot_dev',
     entities: [__dirname + '/../database/entities/**/*.entity{.ts,.js}'],
     migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
     synchronize: process.env.DB_SYNCHRONIZE === 'true', // Only true in development!
@@ -42,11 +42,11 @@ export const databaseConfig = registerAs(
 // DataSource for TypeORM CLI (migrations) - MUST be default export only
 const AppDataSource = new DataSource({
   type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT, 10) || 5432,
-  username: process.env.DB_USERNAME || 'medibot',
-  password: process.env.DB_PASSWORD || 'medibot_dev_password',
-  database: process.env.DB_DATABASE || 'medibot_dev',
+  host: process.env.DATABASE_HOST || process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DATABASE_PORT || process.env.DB_PORT, 10) || 5432,
+  username: process.env.DATABASE_USER || process.env.DB_USERNAME || 'medibot',
+  password: process.env.DATABASE_PASSWORD || process.env.DB_PASSWORD || 'medibot_dev_password',
+  database: process.env.DATABASE_NAME || process.env.DB_DATABASE || 'medibot_dev',
   entities: [__dirname + '/../database/entities/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../database/migrations/**/*{.ts,.js}'],
   synchronize: false,

@@ -15,7 +15,7 @@ on:
 env:
   PYTHON_VERSION: '3.9'
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}/ai-agent
+  IMAGE_NAME: noelkhan/medibot-ai-agent
 
 jobs:
   # ===========================

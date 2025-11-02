@@ -16,11 +16,15 @@ on:
           - staging
           - production
 
+permissions:
+  contents: read
+  packages: write
+
 env:
   NODE_VERSION: '20'
   PYTHON_VERSION: '3.11'
   REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository_owner }}/medibot
+  IMAGE_PREFIX: noelkhan/medibot
 
 jobs:
   # ===========================
