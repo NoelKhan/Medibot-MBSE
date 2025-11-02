@@ -37,10 +37,10 @@ def _extract_json(text: str) -> dict:
 
 def classify_severity(symptoms: Dict[str, Any], user_input: str) -> Dict[str, Any]:
     """
-    Ask the LLM (MedLlama2) to decide triage severity, reasoning, and care plan.
+    Ask the LLM (BioMistral) to decide triage severity, reasoning, and care plan.
     No heuristic logic; everything is model-driven.
     """
-    model_name = os.getenv("OLLAMA_MODEL", "medllama2")
+    model_name = os.getenv("OLLAMA_MODEL", "biomistral")
     chat = ChatOllama(model=model_name, temperature=0)
 
     prompt = ChatPromptTemplate.from_messages([

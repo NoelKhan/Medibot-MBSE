@@ -5,7 +5,7 @@ from enum import Enum
 from typing import Optional
 
 # LLM Configuration
-LLM_MODEL = "mistral:7b-instruct"  # Ollama model name (Mistral 7B Instruct v0.2)
+LLM_MODEL = "biomistral"  # Ollama model name (BioMistral - Medical-focused model)
 LLM_TEMPERATURE = 0.3  # Lower = more conservative (important for medical)
 LLM_MAX_TOKENS = 1024
 LLM_BASE_URL = "http://localhost:11434"  # Ollama endpoint

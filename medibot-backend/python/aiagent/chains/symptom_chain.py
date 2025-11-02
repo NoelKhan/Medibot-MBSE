@@ -27,7 +27,7 @@ def extract_symptoms(user_input: str) -> Dict[str, Any]:
     """
     Fully LLM-driven extraction — no heuristics or external data.
     """
-    model_name = os.getenv("OLLAMA_MODEL", "medllama2")
+    model_name = os.getenv("OLLAMA_MODEL", "biomistral")
     chat = ChatOllama(model=model_name, temperature=0)
 
     prompt = ChatPromptTemplate.from_messages([

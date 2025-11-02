@@ -100,7 +100,7 @@ async def root():
     return {
         "status": "healthy",
         "version": "1.0.0",
-        "model": os.getenv("OLLAMA_MODEL", "medllama2")
+        "model": os.getenv("OLLAMA_MODEL", "biomistral")
     }
 
 
@@ -303,7 +303,7 @@ def generate_user_message(triage: Dict[str, Any], action: Dict[str, Any]) -> str
 @app.on_event("startup")
 async def startup_event():
     print("🚀 AI Agent API Server starting...")
-    print(f"📊 Using model: {os.getenv('OLLAMA_MODEL', 'medllama2')}")
+    print(f"📊 Using model: {os.getenv('OLLAMA_MODEL', 'biomistral')}")
     print("✅ LangGraph workflow initialized")
 
 

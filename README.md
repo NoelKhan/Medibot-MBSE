@@ -488,21 +488,22 @@ Pick based on your computer's RAM:
 
 | Model | Size | RAM Needed | Best For | Install Command |
 |-------|------|------------|----------|-----------------|
-| **Llama 3.2** ⭐ | 2GB | 8GB | Fast, general purpose | `ollama pull llama3.2` |
-| **MedLlama2** | 3.8GB | 8GB | Medical-specific | `ollama pull medllama2` |
+| **BioMistral** ⭐ | 4.1GB | 8GB | Medical-specific, best accuracy | `ollama pull biomistral` |
+| **Llama 3.2** | 2GB | 8GB | Fast, general purpose | `ollama pull llama3.2` |
+| **MedLlama2** | 3.8GB | 8GB | Medical-specific (alternative) | `ollama pull medllama2` |
 | **Llama 2 (7B)** | 3.8GB | 8GB | Medical fine-tuning | `ollama pull llama2:7b` |
 | **Llama 3.1** | 4.7GB | 16GB | Advanced | `ollama pull llama3.1` |
 | **Mistral** | 4.1GB | 8GB | Fast & efficient | `ollama pull mistral` |
 
 **Recommended (All Platforms):**
 ```bash
-ollama pull llama3.2
+ollama pull biomistral
 ```
 
 **Verify:**
 ```bash
 ollama list
-ollama run llama3.2 "What causes headaches?"
+ollama run biomistral "What causes headaches?"
 ```
 
 #### Step 2.3: Setup AI Agent
@@ -555,7 +556,7 @@ notepad .env
 **Required `.env` for AI Agent:**
 ```env
 OLLAMA_BASE_URL=http://localhost:11434
-OLLAMA_MODEL=llama3.2
+OLLAMA_MODEL=biomistral
 API_HOST=0.0.0.0
 API_PORT=8000
 BACKEND_URL=http://localhost:3001

@@ -50,7 +50,7 @@ def generate_summaries(user_input: str, symptoms: Dict[str, Any], triage_result:
     # Optional LLM enhancement (make patient summary more natural)
     if OLLAMA_AVAILABLE:
         try:
-            model_name = os.getenv("OLLAMA_MODEL", "llama3.2:latest")
+            model_name = os.getenv("OLLAMA_MODEL", "biomistral")
             chat = ChatOllama(model=model_name, temperature=0.7)
             prompt = ChatPromptTemplate.from_messages([
                 ("system", "You are a medical triage assistant. Rewrite this triage summary in a clear, empathetic, patient-friendly way (2-3 sentences)."),

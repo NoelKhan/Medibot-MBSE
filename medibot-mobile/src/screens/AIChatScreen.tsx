@@ -277,7 +277,7 @@ const AIChatScreen = ({ navigation }: any) => {
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>AI Medical Assistant</Text>
-          <Text style={styles.headerSubtitle}>Powered by MedLlama2</Text>
+          <Text style={styles.headerSubtitle}>Powered by BioMistral</Text>
         </View>
         <TouchableOpacity onPress={() => navigation.navigate('History')} style={styles.historyButton}>
           <MaterialIcons name="history" size={24} color={AppColors.primary} />
