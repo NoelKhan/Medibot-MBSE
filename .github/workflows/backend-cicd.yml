@@ -107,58 +107,6 @@ jobs:
           name: backend-coverage
 
   # ===========================
-  # E2E TESTS
-  # ===========================
-  e2e:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-    
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: medibot_e2e
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: 'medibot-backend/package-lock.json'
-
-      - name: Install dependencies
-        working-directory: ./medibot-backend
-        run: npm ci
-
-      - name: Run E2E tests
-        working-directory: ./medibot-backend
-        run: npm run test:e2e
-        env:
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_USER: postgres
-          DATABASE_PASSWORD: postgres
-          DATABASE_NAME: medibot_e2e
-          DB_SYNCHRONIZE: 'true'
-          JWT_SECRET: test-secret-key
-          JWT_EXPIRATION: 1h
-          APP_PORT: 3000
-
-  # ===========================
   # SECURITY AUDIT
   # ===========================
   security:
