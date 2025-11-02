@@ -1,0 +1,153 @@
+# Backend Deployment
+# ===================
+# NestJS backend API deployment with horizontal scaling
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"
+  DB_DATABASE: "medibot"
+  DB_NAME: "medibot"
+  DB_USER: "medibot"
+  DB_SSL: "false"
+  DB_SYNCHRONIZE: "true"
+  CORS_ORIGIN: "*"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secret
+type: Opaque
+stringData:
+  DB_PASSWORD: "medibot_password_123"
+  JWT_SECRET: "your-secret-jwt-key-change-in-production"
+  JWT_REFRESH_SECRET: "your-refresh-secret-change-in-production"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medibot-backend
+  labels:
+    app: medibot-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: medibot-backend
+  template:
+    metadata:
+      labels:
+        app: medibot-backend
+    spec:
+      containers:
+        - name: backend
+          image: medibot-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: NODE_ENV
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: PORT
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_PORT
+            - name: DB_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_DATABASE
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_NAME
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_USER
+            - name: DB_SSL
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_SSL
+            - name: DB_SYNCHRONIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DB_SYNCHRONIZE
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: JWT_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secret
+                  key: JWT_REFRESH_SECRET
+            - name: CORS_ORIGIN
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: CORS_ORIGIN
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medibot-backend
+  labels:
+    app: medibot-backend
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: medibot-backend

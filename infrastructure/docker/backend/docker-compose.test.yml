@@ -1,0 +1,85 @@
+# ============================================
+# MediBot Backend - Test Environment
+# ============================================
+# Docker Compose configuration for running tests
+#
+# Usage:
+#   docker-compose -f docker-compose.test.yml up -d
+#   docker-compose -f docker-compose.test.yml run backend npm test
+#   docker-compose -f docker-compose.test.yml down -v
+
+version: '3.8'
+
+services:
+  # PostgreSQL Test Database
+  postgres-test:
+    image: postgres:16-alpine
+    container_name: medibot-postgres-test
+    environment:
+      POSTGRES_USER: medibot_test
+      POSTGRES_PASSWORD: test_password
+      POSTGRES_DB: medibot_test
+    ports:
+      - '5433:5432'
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U medibot_test']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medibot-test-network
+
+  # Redis Test Instance
+  redis-test:
+    image: redis:7-alpine
+    container_name: medibot-redis-test
+    ports:
+      - '6380:6379'
+    tmpfs:
+      - /data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - medibot-test-network
+
+  # Backend Test Runner
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: medibot-backend-test
+    environment:
+      NODE_ENV: test
+      DB_HOST: postgres-test
+      DB_PORT: 5432
+      DB_USERNAME: medibot_test
+      DB_PASSWORD: test_password
+      DB_DATABASE: medibot_test
+      DB_SYNCHRONIZE: 'true'
+      DB_LOGGING: 'false'
+      JWT_SECRET: test-secret-key-for-testing
+      JWT_REFRESH_SECRET: test-refresh-secret-key
+      REDIS_HOST: redis-test
+      REDIS_PORT: 6379
+    depends_on:
+      postgres-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./coverage:/app/coverage
+    networks:
+      - medibot-test-network
+    command: npm run test:e2e
+
+networks:
+  medibot-test-network:
+    driver: bridge

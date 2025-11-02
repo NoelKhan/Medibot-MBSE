@@ -1,0 +1,267 @@
+name: Web Frontend CI/CD
+
+on:
+  push:
+    branches: [main, develop, staging]
+    paths:
+      - 'medibot-web/**'
+      - 'shared/**'
+      - '.github/workflows/web-cicd.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'medibot-web/**'
+      - 'shared/**'
+
+env:
+  NODE_VERSION: '20'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/medibot-web
+
+jobs:
+  # ===========================================
+  # Job 1: Lint and Build
+  # ===========================================
+  build:
+    name: Lint & Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: |
+            medibot-web/package-lock.json
+            shared/package-lock.json
+
+      - name: Install shared dependencies
+        working-directory: ./shared
+        run: npm ci
+
+      - name: Build shared library
+        working-directory: ./shared
+        run: npm run build
+
+      - name: Install web dependencies
+        working-directory: ./medibot-web
+        run: npm ci
+
+      - name: Lint code
+        working-directory: ./medibot-web
+        run: npm run lint || echo "Linting issues found"
+
+      - name: Type check
+        working-directory: ./medibot-web
+        run: npx tsc --noEmit
+
+      - name: Build production bundle
+        working-directory: ./medibot-web
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL_PROD }}
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: medibot-web/dist
+          retention-days: 7
+
+  # ===========================================
+  # Job 2: Build Docker Image
+  # ===========================================
+  docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./medibot-web
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL_PROD }}
+
+  # ===========================================
+  # Job 3: Deploy to Vercel (Development)
+  # ===========================================
+  deploy-vercel-dev:
+    name: Deploy to Vercel (Dev)
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: development
+      url: ${{ steps.deploy.outputs.url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: medibot-web/dist
+
+      - name: Deploy to Vercel
+        id: deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./medibot-web
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+
+  # ===========================================
+  # Job 4: Deploy to Kubernetes (Staging)
+  # ===========================================
+  deploy-k8s-staging:
+    name: Deploy to K8s (Staging)
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.ref == 'refs/heads/staging'
+    environment:
+      name: staging
+      url: https://staging.medibot.app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG_STAGING }}
+
+      - name: Update image in deployment
+        run: |
+          kubectl set image deployment/medibot-web \
+            web=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:staging-${{ github.sha }} \
+            -n staging
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/medibot-web -n staging --timeout=5m
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n staging -l app=medibot-web
+
+  # ===========================================
+  # Job 5: Deploy to Production
+  # ===========================================
+  deploy-prod:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: docker
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://medibot.app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBE_CONFIG_PROD }}
+
+      - name: Update image in deployment
+        run: |
+          kubectl set image deployment/medibot-web \
+            web=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main-${{ github.sha }} \
+            -n production
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/medibot-web -n production --timeout=5m
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n production -l app=medibot-web
+
+      - name: Health check
+        run: |
+          sleep 10
+          curl -f https://medibot.app/ || exit 1
+
+      - name: Invalidate CDN cache (if using CloudFront)
+        if: env.AWS_CLOUDFRONT_ID != ''
+        env:
+          AWS_CLOUDFRONT_ID: ${{ secrets.AWS_CLOUDFRONT_ID }}
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $AWS_CLOUDFRONT_ID \
+            --paths "/*"
+
+  # ===========================================
+  # Job 6: Run Lighthouse CI
+  # ===========================================
+  lighthouse:
+    name: Lighthouse Performance Check
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: medibot-web/dist
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: './medibot-web/lighthouserc.json'
+          uploadArtifacts: true
+          temporaryPublicStorage: true

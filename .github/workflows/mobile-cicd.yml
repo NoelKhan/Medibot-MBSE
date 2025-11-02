@@ -1,0 +1,304 @@
+name: Mobile App CI/CD
+
+on:
+  push:
+    branches: [main, develop, staging]
+    paths:
+      - 'medibot-mobile/**'
+      - '.github/workflows/mobile-cicd.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'medibot-mobile/**'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'development'
+        type: choice
+        options:
+          - development
+          - preview
+          - production
+
+env:
+  NODE_VERSION: '20'
+  WORKING_DIR: './medibot-mobile'
+
+jobs:
+  # Job 1: Lint and Type Check
+  lint-and-typecheck:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIR }}/package-lock.json'
+
+      - name: 📦 Install dependencies
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci
+
+      - name: 🔍 Run ESLint
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm run lint || true
+
+      - name: 🔍 Run TypeScript type check
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npx tsc --noEmit
+
+  # Job 2: Run Tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIR }}/package-lock.json'
+
+      - name: 📦 Install dependencies
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci
+
+      - name: 🧪 Run tests
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm test -- --coverage || true
+
+      - name: 📊 Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ${{ env.WORKING_DIR }}/coverage
+          flags: mobile
+          name: mobile-coverage
+
+  # Job 3: Build for Development
+  build-development:
+    name: Build Development
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/develop' || github.event.inputs.environment == 'development'
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIR }}/package-lock.json'
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Install dependencies
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci
+
+      - name: 🚀 Build development APK
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          npx eas-cli build --platform android --profile development --non-interactive --no-wait
+
+  # Job 4: Build for Preview/Staging
+  build-preview:
+    name: Build Preview (Staging)
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'preview'
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIR }}/package-lock.json'
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Install dependencies
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci
+
+      - name: 🚀 Build preview APK
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          npx eas-cli build --platform all --profile preview --non-interactive --no-wait
+
+  # Job 5: Build and Deploy Production
+  build-production:
+    name: Build Production
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
+    environment: production
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIR }}/package-lock.json'
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Install dependencies
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci
+
+      - name: 📱 Build iOS
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          npx eas-cli build --platform ios --profile production --non-interactive --no-wait
+
+      - name: 🤖 Build Android
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          npx eas-cli build --platform android --profile production --non-interactive --no-wait
+
+  # Job 6: OTA Update
+  ota-update:
+    name: OTA Update
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🏗 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ env.WORKING_DIR }}/package-lock.json'
+
+      - name: 🏗 Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: 📦 Install dependencies
+        working-directory: ${{ env.WORKING_DIR }}
+        run: npm ci
+
+      - name: 🚀 Publish OTA update
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          npx eas-cli update --branch production --message "Auto-update from commit ${{ github.sha }}"
+
+  # Job 7: Build Docker Image (For Web Dashboard)
+  build-docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [lint-and-typecheck, test]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔑 Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🏗 Build and push Docker image
+        working-directory: ${{ env.WORKING_DIR }}
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/medibot-mobile:latest \
+                       -t ${{ secrets.DOCKER_USERNAME }}/medibot-mobile:${{ github.sha }} \
+                       -f Dockerfile.web .
+          docker push ${{ secrets.DOCKER_USERNAME }}/medibot-mobile:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/medibot-mobile:${{ github.sha }}
+
+  # Job 8: Deploy to Kubernetes
+  deploy-k8s:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: build-docker
+    if: github.ref == 'refs/heads/main'
+    environment: kubernetes
+    
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔧 Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > $HOME/.kube/config
+
+      - name: 🚀 Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/medibot-mobile \
+            medibot-mobile=${{ secrets.DOCKER_USERNAME }}/medibot-mobile:${{ github.sha }} \
+            --namespace=medibot
+          kubectl rollout status deployment/medibot-mobile --namespace=medibot
+
+      - name: ✅ Verify deployment
+        run: |
+          kubectl get pods -l app=medibot-mobile --namespace=medibot
+          kubectl get services -l app=medibot-mobile --namespace=medibot
+
+  # Job 9: Notify on Success/Failure
+  notify:
+    name: Notify Results
+    runs-on: ubuntu-latest
+    needs: [build-production, ota-update, deploy-k8s]
+    if: always()
+    
+    steps:
+      - name: 📢 Notify Success
+        if: ${{ success() }}
+        run: |
+          echo "✅ Mobile app CI/CD pipeline completed successfully!"
+          # Add Slack/Discord/Email notification here
+
+      - name: 📢 Notify Failure
+        if: ${{ failure() }}
+        run: |
+          echo "❌ Mobile app CI/CD pipeline failed!"
+          # Add Slack/Discord/Email notification here

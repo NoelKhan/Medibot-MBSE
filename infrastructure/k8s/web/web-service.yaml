@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: medibot-web
+  namespace: default
+  labels:
+    app: medibot-web
+    component: frontend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: medibot-web
+  sessionAffinity: None

@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: medibot-config
+  labels:
+    app: medibot
+data:
+  # Application Configuration
+  NODE_ENV: "production"
+  EXPO_PUBLIC_ENVIRONMENT: "production"
+  EXPO_PUBLIC_MAX_CONCURRENT_USERS: "5"
+  EXPO_PUBLIC_API_URL: "https://api.medibot.yourdomain.com"
+  
+  # Feature Flags
+  EXPO_PUBLIC_ENABLE_ANALYTICS: "true"
+  EXPO_PUBLIC_ENABLE_ERROR_REPORTING: "true"
+  EXPO_PUBLIC_ENABLE_ENHANCED_AI: "true"
+  
+  # Rate Limiting
+  RATE_LIMIT_WINDOW: "900" # 15 minutes
+  RATE_LIMIT_MAX_REQUESTS: "100"
+  
+  # Security
+  CORS_ORIGIN: "https://medibot.yourdomain.com"
+  SECURE_HEADERS: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: medibot-secrets
+  labels:
+    app: medibot
+type: Opaque
+data:
+  # Base64 encoded secrets (replace with actual values)
+  # Example: echo -n "your-secret-key" | base64
+  JWT_SECRET: "eW91ci1qd3Qtc2VjcmV0LWtleQ=="
+  API_KEY: "eW91ci1hcGkta2V5"
+  DATABASE_URL: "eW91ci1kYXRhYmFzZS11cmw="
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: medibot-pdb
+  labels:
+    app: medibot
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: medibot
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: medibot-hpa
+  labels:
+    app: medibot
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: medibot-app
+  minReplicas: 2
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
