@@ -26,7 +26,7 @@ jobs:
   # ===========================================
   build:
     name: Lint & Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     
     steps:
       - name: Checkout code
@@ -69,7 +69,7 @@ jobs:
   # ===========================================
   docker:
     name: Build Docker Image
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build
     if: github.event_name == 'push'
     
@@ -120,7 +120,7 @@ jobs:
   # ===========================================
   deploy-vercel-dev:
     name: Deploy to Vercel (Dev)
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build
     if: github.ref == 'refs/heads/develop'
     environment:
@@ -152,7 +152,7 @@ jobs:
   # ===========================================
   deploy-k8s-staging:
     name: Deploy to K8s (Staging)
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: docker
     if: github.ref == 'refs/heads/staging'
     environment:
@@ -188,7 +188,7 @@ jobs:
   # ===========================================
   deploy-prod:
     name: Deploy to Production
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: docker
     if: github.ref == 'refs/heads/main'
     environment:
@@ -238,7 +238,7 @@ jobs:
   # ===========================================
   lighthouse:
     name: Lighthouse Performance Check
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build
     if: github.event_name == 'pull_request'
 

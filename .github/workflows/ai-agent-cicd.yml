@@ -23,7 +23,7 @@ jobs:
   # ===========================
   lint:
     name: Lint & Type Check
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     
     steps:
       - name: Checkout code
@@ -65,7 +65,7 @@ jobs:
   # ===========================
   test:
     name: Unit Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: lint
     
     steps:
@@ -104,7 +104,7 @@ jobs:
   # ===========================
   build:
     name: Build Docker Image
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint, test]
     if: github.event_name != 'pull_request'
     
@@ -155,7 +155,7 @@ jobs:
   # ===========================
   integration-test:
     name: Integration Tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build
     if: github.event_name != 'pull_request'
 
@@ -199,7 +199,7 @@ jobs:
   # ===========================
   deploy-dev:
     name: Deploy to Development
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [build, integration-test]
     if: github.ref == 'refs/heads/develop'
     environment:
@@ -228,7 +228,7 @@ jobs:
   # ===========================
   deploy-prod:
     name: Deploy to Production
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [build, integration-test]
     if: github.ref == 'refs/heads/main'
     environment:
@@ -262,7 +262,7 @@ jobs:
   # ===========================
   notify:
     name: Notify on Failure
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint, test, build, deploy-dev, deploy-prod]
     if: failure()
 
