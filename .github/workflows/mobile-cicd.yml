@@ -30,7 +30,7 @@ jobs:
   # Job 1: Lint and Type Check
   lint-and-typecheck:
     name: Lint & Type Check
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     
     steps:
       - name: 🏗 Checkout repository
@@ -58,7 +58,7 @@ jobs:
   # Job 2: Run Tests
   test:
     name: Run Tests
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: lint-and-typecheck
     
     steps:
@@ -90,7 +90,7 @@ jobs:
   # Job 3: Build for Development
   build-development:
     name: Build Development
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
     if: github.ref == 'refs/heads/develop' || github.event.inputs.environment == 'development'
     
@@ -123,7 +123,7 @@ jobs:
   # Job 4: Build for Preview/Staging
   build-preview:
     name: Build Preview (Staging)
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
     if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'preview'
     
@@ -156,7 +156,7 @@ jobs:
   # Job 5: Build and Deploy Production
   build-production:
     name: Build Production
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
     if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
     environment: production
@@ -195,7 +195,7 @@ jobs:
   # Job 6: OTA Update
   ota-update:
     name: OTA Update
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
@@ -228,7 +228,7 @@ jobs:
   # Job 7: Build Docker Image (For Web Dashboard)
   build-docker:
     name: Build Docker Image
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
     if: github.ref == 'refs/heads/main'
     
@@ -257,7 +257,7 @@ jobs:
   # Job 8: Deploy to Kubernetes
   deploy-k8s:
     name: Deploy to Kubernetes
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build-docker
     if: github.ref == 'refs/heads/main'
     environment: kubernetes
@@ -286,7 +286,7 @@ jobs:
   # Job 9: Notify on Success/Failure
   notify:
     name: Notify Results
-    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
+    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [build-production, ota-update, deploy-k8s]
     if: always()
     
