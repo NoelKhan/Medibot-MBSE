@@ -26,8 +26,8 @@ spec:
     spec:
       containers:
       - name: web
-        image: ghcr.io/noelkhan/medibot/medibot-web:latest
-        imagePullPolicy: Always
+        image: medibot-web:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
           name: http
