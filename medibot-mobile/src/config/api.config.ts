@@ -44,13 +44,13 @@ const getApiBaseUrl = (): string => {
     
     // Always use local IP for Expo Go on physical devices
     // Comment out the return below if using simulator/emulator
-    return `http://${LOCAL_IP}:3000`;
+    return `http://${LOCAL_IP}:3001`;
     
     // Uncomment below ONLY if using iOS Simulator
-    // return 'http://localhost:3000';
+    // return 'http://localhost:3001';
     
     // Uncomment below ONLY if using Android Emulator
-    // return 'http://10.0.2.2:3000';
+    // return 'http://10.0.2.2:3001';
   }
 
   // Production - replace with your deployed backend URL
