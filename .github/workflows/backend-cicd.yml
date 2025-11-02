@@ -147,13 +147,27 @@ jobs:
   # ===========================
   build:
     name: Build Docker Image
-    runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
+    # Prefer self-hosted runners for Docker builds (avoid GitHub-hosted disk limits). Override with RUNNER_TYPE.
+    runs-on: ${{ vars.RUNNER_TYPE || 'self-hosted' }}
     needs: [lint, test]
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Check disk space and (optionally) prune Docker
+        run: |
+          echo "Checking available disk space before Docker build..."
+          avail_kb=$(df -k . | awk 'NR==2{print $4}') || avail_kb=0
+          echo "Available KB: $avail_kb"
+          if [ "$avail_kb" -lt 1000000 ]; then
+            echo "Low disk space detected (<~1GB). Running docker system prune to free space..."
+            docker system prune -af || true
+            docker builder prune -af || true
+          else
+            echo "Sufficient disk space available."
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
