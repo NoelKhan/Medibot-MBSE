@@ -68,8 +68,8 @@ venv/
 ENV/
 .venv
 
-# Package files
-package-lock.json
+# Package files - Keep package-lock.json for CI/CD reproducibility
+# package-lock.json  # Commented out - we need this for CI/CD
 yarn.lock
 
 # Misc
