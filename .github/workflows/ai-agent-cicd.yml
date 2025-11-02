@@ -118,18 +118,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check disk space and (optionally) prune Docker
+      - name: Check disk space and prune Docker if needed
         run: |
           echo "Checking available disk space before Docker build..."
-          avail_kb=$(df -k . | awk 'NR==2{print $4}') || avail_kb=0
-          echo "Available KB: $avail_kb"
-          # If available space less than ~1GB (1,000,000 KB), attempt to prune docker caches
-          if [ "$avail_kb" -lt 1000000 ]; then
-            echo "Low disk space detected (<~1GB). Running docker system prune to free space..."
-            docker system prune -af || true
-            docker builder prune -af || true
+          if command -v df &> /dev/null; then
+            avail_kb=$(df -k "$PWD" 2>/dev/null | awk 'NR==2{print $4}') || avail_kb=999999999
+            echo "Available KB: $avail_kb"
+            if [ "$avail_kb" -lt 2000000 ]; then
+              echo "Low disk space detected (<2GB). Running docker system prune to free space..."
+              docker system prune -af --volumes 2>&1 || true
+              docker builder prune -af 2>&1 || true
+            else
+              echo "Sufficient disk space available (~$(( avail_kb / 1024 ))MB)."
+            fi
           else
-            echo "Sufficient disk space available."
+            echo "df command not available, skipping disk check."
           fi
 
       - name: Set up Docker Buildx
