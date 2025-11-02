@@ -49,7 +49,7 @@ export interface ApiConfig {
 const isDevelopment = import.meta.env.MODE === 'development';
 
 export const API_CONFIG: ApiConfig = {
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3001',
   timeout: 30000,
   endpoints: {
     auth: {

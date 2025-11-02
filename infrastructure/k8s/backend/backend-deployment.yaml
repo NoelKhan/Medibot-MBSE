@@ -16,6 +16,8 @@ data:
   DB_SSL: "false"
   DB_SYNCHRONIZE: "true"
   CORS_ORIGIN: "*"
+  # Disable Python AI Agent for basic K8s deployment
+  DISABLE_PYTHON_AI: "true"
 ---
 apiVersion: v1
 kind: Secret
@@ -116,6 +118,11 @@ spec:
                 configMapKeyRef:
                   name: backend-config
                   key: CORS_ORIGIN
+            - name: DISABLE_PYTHON_AI
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-config
+                  key: DISABLE_PYTHON_AI
           resources:
             requests:
               memory: "256Mi"

@@ -12,7 +12,7 @@ import { createLogger } from '../services/Logger';
 const logger = createLogger('FeatureFlags');
 
 // Get backend URL from environment or use default
-const BACKEND_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.0.158:3000';
+const BACKEND_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.0.158:3001';
 
 /**
  * API & Backend Configuration

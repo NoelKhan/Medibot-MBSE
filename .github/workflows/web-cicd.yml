@@ -122,7 +122,7 @@ jobs:
     name: Deploy to Vercel (Dev)
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build
-    if: github.ref == 'refs/heads/develop'
+    if: false  # Disabled until VERCEL_TOKEN secret is configured
     environment:
       name: development
       url: ${{ steps.deploy.outputs.url }}
@@ -154,7 +154,7 @@ jobs:
     name: Deploy to K8s (Staging)
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: docker
-    if: github.ref == 'refs/heads/staging'
+    if: false  # Disabled until KUBE_CONFIG_STAGING secret is configured
     environment:
       name: staging
       url: https://staging.medibot.app
@@ -190,7 +190,7 @@ jobs:
     name: Deploy to Production
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: docker
-    if: github.ref == 'refs/heads/main'
+    if: false  # Disabled until KUBE_CONFIG_PROD secret is configured
     environment:
       name: production
       url: https://medibot.app

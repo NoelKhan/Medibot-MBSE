@@ -20,6 +20,15 @@ export class PythonManagerService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
+    // Check if Python AI Agent should be disabled
+    const disablePythonAI = this.configService.get<string>('DISABLE_PYTHON_AI') === 'true';
+    
+    if (disablePythonAI) {
+      this.logger.warn('⚠️  Python AIAgent is disabled via DISABLE_PYTHON_AI environment variable');
+      this.logger.warn('⚠️  AI chat features will not be available');
+      return;
+    }
+
     this.logger.log('🤖 Initializing Python AIAgent service...');
     
     try {
@@ -27,7 +36,8 @@ export class PythonManagerService implements OnModuleInit, OnModuleDestroy {
       this.logger.log(`✅ Python AIAgent started successfully on port ${this.aiAgentPort}`);
     } catch (error) {
       this.logger.error('❌ Failed to start Python AIAgent:', error);
-      throw error;
+      this.logger.warn('⚠️  Backend will continue without AI Agent. AI features will be unavailable.');
+      // Don't throw - allow backend to start without Python AI Agent
     }
   }
 

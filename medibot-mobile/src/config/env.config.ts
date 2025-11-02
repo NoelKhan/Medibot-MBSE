@@ -37,7 +37,7 @@ const parseBool = (value: string | undefined, defaultValue: boolean): boolean =>
 
 const configs: Record<Environment, EnvironmentConfig> = {
   development: {
-    apiUrl: process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:3000',
+    apiUrl: process.env.EXPO_PUBLIC_BACKEND_URL || 'http://192.168.0.158:3001',
     apiTimeout: parseInt(process.env.EXPO_PUBLIC_API_TIMEOUT || '10000'),
     enableAnalytics: parseBool(process.env.EXPO_PUBLIC_ENABLE_ANALYTICS, false),
     enableLogging: parseBool(process.env.EXPO_PUBLIC_LOG_API_CALLS, true),

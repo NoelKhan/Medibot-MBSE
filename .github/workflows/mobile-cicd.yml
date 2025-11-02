@@ -45,7 +45,7 @@ jobs:
 
       - name: 📦 Install dependencies
         working-directory: ${{ env.WORKING_DIR }}
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: 🔍 Run ESLint
         working-directory: ${{ env.WORKING_DIR }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: 📦 Install dependencies
         working-directory: ${{ env.WORKING_DIR }}
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: 🧪 Run tests
         working-directory: ${{ env.WORKING_DIR }}
@@ -92,7 +92,7 @@ jobs:
     name: Build Development
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
-    if: github.ref == 'refs/heads/develop' || github.event.inputs.environment == 'development'
+    if: false  # Disabled until EXPO_TOKEN secret is configured
     
     steps:
       - name: 🏗 Checkout repository
@@ -125,7 +125,7 @@ jobs:
     name: Build Preview (Staging)
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
-    if: github.ref == 'refs/heads/staging' || github.event.inputs.environment == 'preview'
+    if: false  # Disabled until EXPO_TOKEN secret is configured
     
     steps:
       - name: 🏗 Checkout repository
@@ -158,7 +158,7 @@ jobs:
     name: Build Production
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
-    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
+    if: false  # Disabled until EXPO_TOKEN secret is configured
     environment: production
     
     steps:
@@ -197,7 +197,7 @@ jobs:
     name: OTA Update
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: false  # Disabled until EXPO_TOKEN secret is configured
     
     steps:
       - name: 🏗 Checkout repository
@@ -230,7 +230,7 @@ jobs:
     name: Build Docker Image
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: [lint-and-typecheck, test]
-    if: github.ref == 'refs/heads/main'
+    if: false  # Disabled until DOCKER_USERNAME/PASSWORD secrets are configured
     
     steps:
       - name: 🏗 Checkout repository
@@ -259,7 +259,7 @@ jobs:
     name: Deploy to Kubernetes
     runs-on: ${{ vars.RUNNER_TYPE || 'ubuntu-latest' }}
     needs: build-docker
-    if: github.ref == 'refs/heads/main'
+    if: false  # Disabled until KUBE_CONFIG secret is configured
     environment: kubernetes
     
     steps:
